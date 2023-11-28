@@ -1,0 +1,33 @@
+runtime:
+  cache_dir: ./.cache/antora
+
+site:
+  title: AAP2 Containerized
+  url: https://redhat-scholars.github.io/course-template
+  start_page: modules::module-01.adoc
+
+content:
+  sources:
+    - url: ./
+      start_path: content
+
+asciidoc:
+  attributes:
+    release-version: master
+    page-pagination: true
+  extensions:
+    - ./content/lib/tab-block.js
+    - ./content/lib/remote-include-processor.js
+
+ui:
+  bundle:
+    url: https://github.com/redhat-developer-demos/rhd-tutorial-ui/releases/download/v0.1.9/ui-bundle.zip
+    snapshot: true
+  supplemental_files:
+    - path: ./content/supplemental-ui
+    - path: .nojekyll
+    - path: ui.yml
+      contents: "static_files: [ .nojekyll ]"
+
+output:
+  dir: ./www
