@@ -10,7 +10,7 @@ content:
   sources:
     - url: .
       branches: HEAD
-      start_path: documentation
+      start_path: content
 asciidoc:
   attributes:
     title: Template Tutorial(Dev Mode)
@@ -21,6 +21,6 @@ ui:
   bundle:
     url: https://github.com/redhat-developer-demos/rhd-tutorial-ui/releases/download/v0.1.9/ui-bundle.zip
     snapshot: true
-  supplemental_files: ./supplemental-ui
+  supplemental_files: ./content/supplemental-ui
 output:
   dir: ./www
