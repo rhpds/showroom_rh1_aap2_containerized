@@ -1,12 +1,8 @@
-= Overview
+= Introduction
 
 
+* Modules
 
-
-
-The `lab_name` var, known as an asciidoc attribute, above was set in `./content/antora.yml` and can be used to set the lab_name or title of your content.
-You are both free to change its value and if you prefer to use a different var name, you can change the value of `lab_name`, for example to `title` in `./content/antora.yml` and then reference it in your content as `\{title}`.
-me
 
 
 Testing the Keycaps in asciidoc 
@@ -14,7 +10,6 @@ Testing the Keycaps in asciidoc
 
 ////
 Your brilliance
-////
 
 . Open a additional terminal with tmux by pressing kbd:[CTRL+b] then kbd:[c]
 
@@ -49,12 +44,13 @@ podman ps
 [source,texinfo,subs="attributes"]
 ----
 CONTAINER ID  IMAGE                        COMMAND           CREATED      STATUS      PORTS                 NAMES
-2dcfee9e50c4  docker.io/library/httpd:2.4  httpd-foreground  3 hours ago  Up 3 hours  0.0.0.0:8080->80/tcp  showroom-httpd
+2dcfee9e50c4  {guid} docker.io/library/httpd:2.4  httpd-foreground  3 hours ago  Up 3 hours  0.0.0.0:8080->80/tcp  showroom-httpd
 ----
 
 
 
 
+////
 
 
 
