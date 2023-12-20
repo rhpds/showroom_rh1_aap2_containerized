@@ -17,7 +17,7 @@ fi
 
 # Git clone operation
 
-git fetch
+git pull
 
 # Copy back the antora.yml whether required or not
 
