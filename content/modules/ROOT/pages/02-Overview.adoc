@@ -1,6 +1,36 @@
-= Getting Setup
+= Overview
 
-* Install Ansible and other dependencies
+
+. In this module, we will explore environments and get ready to install the Containerized version of AAP2(Red Hat Ansible Automation Platform 2).
+
+== Lab Goals
+ 
+* Install AAP2 Containerized:
+** Automation Controller
+** Automation Hub
+** Event Driven Automation
+** Postgres
+* Become familiar with different deployment options
+* Configure AAP2 Containerized
+* Explore the AAP2 Containerized environment
+** Storage 
+** Logs
+** Troubleshooting
+
+
+== Lab Topology
+
+// TODO: Add diagram
+
+ image::images/..png[Lab Topology,align="center",width="100%"]
+
+  * `bastion` - the terminals to your right are connected to this host via ssh as the `devops` user.
+  ** This host is where you will be primarily working from.
+  * The AAP2 Hosts
+  ** `aap2`
+
+  NOTE: All instances are running RHEL 9.3 and are sized appropriately for the lab.
+
 *
 
 My guid is {guid}

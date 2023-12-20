@@ -1,11 +1,32 @@
 = Introduction
 
+Welcome to the {lab_name} lab. This lab will walk you through
 
+* 1
+* 2
 * Modules
+
+== The Modules
+
+. Overview
+. The second module will walk you through
+. The third module will walk you through
+. The fourth module will walk you through
+
+
+== Credentials and Resources
+
+
+
+NOTE: The URLs for the AAP2 Infrastructure itself will, obviously, not respond until after you have successfully installed the AAP2 Infrastructure. 
+
+You will need to use the IP address of the AAP2 Infrastructure host in the URLs below.  The IP address of the AAP2 Infrastructure host is provided in the lab environment details page.
+
 
 
 
 Testing the Keycaps in asciidoc 
+
 
 
 ////
