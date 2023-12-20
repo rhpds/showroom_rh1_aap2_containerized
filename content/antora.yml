@@ -6,8 +6,9 @@ nav:
 
 asciidoc:
   attributes:
+    # experimental: true
     lab_name: "RH1 AAP2 Containerized"
-    release-version: master
+    # release-version: master
     page-pagination: true
     my_var: "foo - this is an asciidoc attribute from `content/antora.yml`"
     guid: my-guid

@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# Check if .cache/showroom exists, if not, create it
+if [ ! -d ".cache/showroom/content" ]; then
+  mkdir -p .cache/showroom/content
+fi
+
+# Copy content/antora.yml to .cache/showroom if it exists
+if [ -f "content/antora.yml" ]; then
+  cp content/antora.yml .cache/showroom/content/anotra.yml
+fi
+
+# Copy www/index.html to .cache/showroom if it exists
+if [ -f "www/index.html" ]; then
+  cp -r www .cache/showroom/
+fi
+
+# Git clone operation
+
+git fetch
+
+# Copy back the antora.yml whether required or not
+
+if [ -f ".cache/showroom/antora.yml" ]; then
+  cp .cache/showroom/content/antora.yml content/
+fi
+
+# Rebuild html
+# podman run --rm --name showroom-builder --platform linux/amd64 -v "./:/antora:z" docker.io/antora/antora rh1-site.yml
+
+./utilities/lab-build
+
+# Reinsert index
+
+if [ -f ".cache/showroom/index.html" ]; then
+  cp .cache/showroom/www/index.html www/
+fi

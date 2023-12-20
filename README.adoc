@@ -56,3 +56,15 @@ However _typically_ you will only need to only make very few edits
 ├── zero-touch-config.yml            # 
 └── zero-touch-site.yml
 ----
+
+=== Working with `gulp`
+
+`gulp` allows live rendering and previewing of your lab content.
+
+
+[source,sh]
+----
+npm install
+npm audit fix --force
+gulp
+----
