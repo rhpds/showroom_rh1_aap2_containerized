@@ -30,8 +30,22 @@ fi
 
 ./utilities/lab-build
 
-# Reinsert index
+# Reinsert index.html
 
-if [ -f ".cache/showroom/index.html" ]; then
+if [ -f ".cache/showroom/www/index.html" ]; then
   cp .cache/showroom/www/index.html www/
+fi
+
+# replace any .css files
+
+for file in .cache/showroom/www/*.css; do
+  if [ -f "$file" ]; then
+    css_file_exists=true
+    break # Stop the loop if at least one file is found
+  fi
+done
+
+# Check if any file was found
+if $css_file_exists; then
+  cp .cache/showroom/www/*.css www/
 fi
