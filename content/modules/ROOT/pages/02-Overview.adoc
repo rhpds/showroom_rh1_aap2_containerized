@@ -1,7 +1,13 @@
+:icons: font
 = Overview
 
 
 . In this module, we will explore environments and get ready to install the Containerized version of AAP2(Red Hat Ansible Automation Platform 2).
+
+
+icon:clock-o[Duration: 10 Minutes] 
+
+This will insert a clock face icon from the FontAwesome icon set. The clock-o is the name of the clock face ic
 
 == Lab Goals
  
