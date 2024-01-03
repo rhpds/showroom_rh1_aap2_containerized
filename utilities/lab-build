@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-#
 
 echo "Starting build process..."
 echo Backing up old www to .cache/showroom/www

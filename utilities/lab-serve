@@ -5,5 +5,25 @@ echo "Starting serve process..."
 # TODO: Add case statement to allow stopping, starting, and restarting
 # TODO: Add logic to detect both podman and docker, if both are installed, use podman as default "first found"
 # TODO: Move to RHEL image
-podman run -d --rm --name showroom-httpd -p 8443:80 -v "./www:/usr/local/apache2/htdocs/" docker.io/httpd:2.4
+
+# Setup Container Runtime
+# Check if Podman is available
+if podman ps &>/dev/null; then
+  CONTAINER_RUNTIME="podman"
+  # If Podman is not available, check for Docker
+elif docker ps &>/dev/null; then
+  CONTAINER_RUNTIME="docker"
+  # If neither is available
+else
+  CONTAINER_RUNTIME="none"
+  echo No container runtime found. Please install Podman or Docker.
+  exit 1
+fi
+
+${CONTAINER_RUNTIME} \
+  run -d --rm --name showroom-httpd \
+  --platform linux/amd64 -p 8443:80 \
+  -v "./www:/usr/local/apache2/htdocs/" \
+  docker.io/httpd:2.4
+
 echo "Serving lab content on http://localhost:8443/index.html"
