@@ -1,9 +1,9 @@
 ---
 site:
   title: AAP2 Containerized
-  start_page: modules::01-Introduction.adoc
+  # start_page: modules::01-Introduction.adoc
   # url: https://redhat-scholars.github.io/course-template
-  # start_page: modules::index.adoc
+  start_page: modules::index.adoc
 
 content:
   sources:

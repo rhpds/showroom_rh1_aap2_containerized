@@ -1,18 +1,15 @@
 :icons: font
 = Overview
 
-
-. In this module, we will explore environments and get ready to install the Containerized version of AAP2(Red Hat Ansible Automation Platform 2).
-
+. In this module, we will explore our environments and get ready to install the Containerized version of AAP2 (Red Hat Ansible Automation Platform 2).
 
 icon:clock-o[Duration: 10 Minutes] 
 
-This will insert a clock face icon from the FontAwesome icon set. The clock-o is the name of the clock face ic
-
 == Lab Goals
- 
-* Install AAP2 Containerized:
-** Automation Controller
+
+NOTE: Does this belong in the lab goals or the lab description?  
+
+* Install the Containerized version of AAP2
 ** Automation Hub
 ** Event Driven Automation
 ** Postgres
@@ -22,7 +19,6 @@ This will insert a clock face icon from the FontAwesome icon set. The clock-o is
 ** Storage 
 ** Logs
 ** Troubleshooting
-
 
 == Lab Topology
 
@@ -37,40 +33,6 @@ This will insert a clock face icon from the FontAwesome icon set. The clock-o is
 
   NOTE: All instances are running RHEL 9.3 and are sized appropriately for the lab.
 
-*
-
-My guid is {guid}
-
-.Test 1
-[source,sh]
-----
-My guid is {guid}
-----
-
-.Test 2 role=execute
-// [source,sh,role=execute]
-[source,sh,role=execute,subs=attributes+]
-----
-My guid is {guid}
-----
-
-.Test 2.5 role=copypaste
-[source,sh,role="copypaste",subs=attributes+]
-----
-My guid is {guid}
-----
-
-.Test 3 % query string
-[source,sh,role=execute]
-----
-My guid is %guid%
-----
-
-.Test 4 % but attribute
-[source,sh,role=execute]
-----
-My my_var is %my_var%
-----
 == Explore your environment
 
 Several artifacts and tools have been installed for you. Let's take a look at what is available.
@@ -86,20 +48,14 @@ tree -L 1
 └── postgres-tasks.yml
 ----
 
-
-
-community.postgresql
-
-
-community.postgresql
+// community.postgresql
 
 == Initial Configuration
 
-| NOTE: Now is a great time to add any of your favorite tools `rg`, `nvim` etc. You'll be on this host for ~90 minutes so take a moment to make it your own. 
-
-. First, we will get our Ansible environment set up. 
-+
 TIP: Some of the packages we are installing are already installed. However, we are following the Installation Guide (LINK) here are it is worth seeing what dependencies are expected
+
+
+. Install Ansible and other dependencies
 +
 
 [source,sh]
@@ -127,21 +83,35 @@ Red Hat Enterprise Linux 9 for x86_64 - AppStream - Advanced Update Support (RPM
   sshpass-1.09-4.el9.x86_64
 
 Complete!
-
 ----
 +
 
-Let's just check Ansible is installed correctly and it is working. In the home directory of the `devops` user there is an inventory it is all working.
+Before progressing further ensure that Ansible is installed correctly and it is working. In the home directory of the `devops` user there is an inventory it is all working.
 +
 
 [source,sh,role=execute]
 ----
-[devops@bastion ~]$ ansible all -m ping -i multi-tier-inventory
+ansible all -m ping -i inventory
 ----
 +
 
+.Sample Output
+[source,texinfo]
+----
+<TRUNCATED>
+aap2-database.aap2-02.internal | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3"
+    },
+    "changed": false,
+    "ping
+
+----
 
 
+| NOTE: Now is a great time to add any of your favorite tools `rg`, `nvim` etc. You'll be on this host for ~90 minutes so take a moment to make it your own. 
+
+. First, we will get our Ansible environment set up. 
 
 We will be using the `community.postgresql` collection to install the PostgreSQL database server.
 
@@ -395,3 +365,39 @@ Alternatively, you can use `podman` to kill the running container from
 ----
 podman kill $(podman ps | grep -v CONTAINER | cut -f1 -d" " )
 ----
+
+////
+My guid is {guid}
+
+.Test 1
+[source,sh]
+----
+My guid is {guid}
+----
+
+.Test 2 role=execute
+// [source,sh,role=execute]
+[source,sh,role=execute,subs=attributes+]
+----
+My guid is {guid}
+----
+
+.Test 2.5 role=copypaste
+[source,sh,role="copypaste",subs=attributes+]
+----
+My guid is {guid}
+----
+
+.Test 3 % query string
+[source,sh,role=execute]
+----
+My guid is %guid%
+----
+
+.Test 4 % but attribute
+[source,sh,role=execute]
+----
+My my_var is %my_var%
+----
+
+////
