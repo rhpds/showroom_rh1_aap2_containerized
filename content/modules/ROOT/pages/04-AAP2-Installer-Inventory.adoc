@@ -1,0 +1,299 @@
+:subdomain: aap2-01.sandbox5.opentlc.com
+= Getting Setup
+
+Now we are ready to configure our installation. In your home directory, you will find a compressed profile with the unable automation platform container installer.
+
+Remember, currently, this is still a tech preview and you can read more details about what Redhat means by tech preview here. The installer is available for Redhat enterprise Lennox across to architectures X 86 and arm. In addition, it is available in two formats, a lightweight installer, which assumes both Internet access and a red heart network login. The other installer used here is the bundled installer which includes all its dependencies, including the container images for the major components and for the execution, environments, etc. We will explore these during the installation process.
+
+== Unpack and Explore the Installer
+
+. Unpack the installer, using `tar` with the `-v` (verbose) option, so you can see the components being unpacked
++
+
+As the tar archive unpacks you will see there are 2 major components to the bundle installer, collections and the bundle itself is largely composed of container images
++
+
+[source,ini,role=execute,subs=attributes+]
+----
+tar -xvf ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64.tar.gz
+----
++
+
+.Sample Output
+[source,texinfo]
+----
+ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64/collections/ansible_collections/community.postgresql-3.2.0.info/GALAXY.yml
+ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64/collections/ansible_collections/community.crypto-2.15.1.info/
+ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64/collections/ansible_collections/community.crypto-2.15.1.info/GALAXY.yml
+ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64/README.md
+ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64/inventory
+bundle/
+ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64/bundle/images/
+ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64/bundle/images/controller-rhel8.tar.gz
+ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64/bundle/images/de-supported-rhel8.tar.gz
+ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64/bundle/images/eda-controller-rhel8.tar.gz
+ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64/bundle/images/eda-controller-ui-rhel8.tar.gz
+ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64/bundle/images/ee-minimal-rhel8.tar.gz
+ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64/bundle/images/ee-supported-rhel8.tar.gz
+ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64/bundle/images/hub-rhel8.tar.gz
+ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64/bundle/images/hub-web-rhel8.tar.gz
+ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64/bundle/images/ee-29-rhel8.tar.gz
+ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64/bundle/images/postgresql-13.ta
+----
++
+
+. Change directory into the installer directory
++
+
+[source,sh]
+[source,ini,role=execute,subs=attributes+]
+----
+cd ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64
+----
+
+. Explore the basic structure, for example `tree -L 3` gives an informative overview
+
++
+[source,sh]
+[source,ini,role=execute,subs=attributes+]
+----
+ tree -L 3
+----
++
+
+.Sample Output
+[source,texinfo]
+----
+.
+├── bundle
+│   └── images
+│       ├── controller-rhel8.tar.gz
+│       ├── de-supported-rhel8.tar.gz
+│       ├── eda-controller-rhel8.tar.gz
+│       ├── eda-controller-ui-rhel8.tar.gz
+│       ├── ee-29-rhel8.tar.gz
+│       ├── ee-minimal-rhel8.tar.gz
+│       ├── ee-supported-rhel8.tar.gz
+│       ├── hub-rhel8.tar.gz
+│       ├── hub-web-rhel8.tar.gz
+│       ├── postgresql-13.tar.gz
+│       └── redis-6.tar.gz
+├── collections
+│   └── ansible_collections
+│       ├── ansible
+│       ├── ansible.posix-1.5.4.info
+│       ├── community
+│       ├── community.crypto-2.15.1.info
+│       ├── community.postgresql-3.2.0.info
+│       ├── containers
+│       ├── containers.podman-1.10.3.info
+│       ├── infra
+│       └── infra.controller_configuration-2.5.1.info
+├── inventory
+└── README.md
+----
++
+
+. Take a moment to read through the `README.md` as it gives a good overview of what variables are available to you and what defaults have been set. We will, largely, use default values where we can in this lab.
++
+
+[source,ini,role=execute,subs=attributes+]
+----
+less README.md
+----
+
+== Configuring your Inventory
+
+In this section you will configure your inventory, logically this can be seen as 5 main componets
+
+
+. Automation Controller
+. Automation Hub
+. Automation EDA (Event Driven Ansible)
+. Postgresql
+. AAP Controller Postinstall  (Optional, covered in next Module)
+
+=== Editing the Inventory
+
+All basic configuration for the AAP2 Containaerized Installer is done via the `inventory` file. 
+
+[TIP] 
+====
+Your machine, `bastion` comes with both `vim` and `nano` pre-installed but `mc` (Midnight Commander), neovim, and `emacs` are all available via `dnf` e.g. `sudo dnf install -y mc` etc. Please feel free to install your favorite editor.
+
+Those of you using Visual Studio Code on your laptops or similar are welcome to use the `ssh` vars in the *Resources and Credentials* Module for remote editing however setup and configuration are not covered in the lab.
+====
+
+. Open your inventory file for editing using your editor of choice:
++
+
+[source,ini,role=execute,subs=attributes+]
+----
+vim inventory
+----
+
+. Configure the Groups for Controller, Hub, and EDA
++
+
+As you can see the inventory is partially configured for a local install eg on a single local VM. However, in our case, we will be placing the controller, hub, and EDA on a single remote host. Recall that we can distribute them more widely with 1 component per VM etc - the installer is very flexible.
++
+
+[NOTE]
+In our example all `ssh` is setup already, feel free to explore `/home/devops/.ssh/config` In many cases you may need to make changes either there or in the inventory file. A good simple test is `ansible all -m ping -i inventory` to validate configuration and ssg setup.
++
+
+[source,ini,role=execute,subs=attributes+]
+----
+# This is the AAP installer inventory file
+# Please consult the docs if you're unsure what to add
+# For all optional variables please consult the included README.md
+
+# This section is for your AAP Controller host(s)
+# -------------------------------------------------
+[automationcontroller]
+aap2
+
+# This section is for your AAP Automation Hub host(s)
+# -----------------------------------------------------
+[automationhub]
+aap2
+
+# This section is for your AAP EDA Controller host(s)
+# -----------------------------------------------------
+[automationeda]
+aap2
+----
+
+. Configure the remote, Postgres `database` group and associated vars 
++
+
+[source,ini,role=execute,subs=attributes+]
+----
+# This section is for the AAP database(s)
+# -----------------------------------------
+# Uncomment the lines below and amend appropriately if you want AAP to install and manage the postgres databases
+# Leave commented out if you intend to use your own external database and just set appropriate _pg_hosts vars
+# see mandatory sections under each AAP component
+[database]
+aap2-database
+
+[all:vars]
+
+# Common variables needed for installation
+# ----------------------------------------
+postgresql_admin_username=postgres
+postgresql_admin_password=r3dh4t1!
+----
++
+
+[NOTE]
+====
+These are set to match the pre-configured vars in the previous module. 
+
+You could also in this section point to an appropriately configured Postgresql DBaaS such as AWS's RDS. (Not recommended if you are not deploying the rest of your infrastructure on the same cloud/VPC).
+====
+
+. Configure the Common Variables - Section 1
++
+
+For clarity, we will break configuring the remaining Common Variables in `[all:vars]` into several sections. Starting with the registry and bundle configuration. Because we have pre-placed the bundle installer on your host we do not need to access the registry as the images are stored in the bundle.
++
+
+The next section should look like this
++
+
+[source,ini,role=execute,subs=attributes+]
+----
+# If using the online (non-bundled) installer, you need to set RHN registry credentials
+#registry_username=<your RHN username>
+#registry_password=<your RHN password>
+# If using the bundled installer, you need to alter defaults by using:
+bundle_install=true
+bundle_dir=/home/devops/ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64/bundle
+----
++
+
+[TIP]
+====
+In the field, if you are not copying from a lab don't forget that the `bundle_dir` is not just the installer directory but also needs the `/bundle` at the end of the `bundle_dir` path.
+====
+
+
+. Configure the Common Variables - Controller
++
+
+In this section, we will configure the Controller, and associate it with the Postgres instance we configured earlier. Getting slightly ahead of ourselves we will also do the initial setup of the *new* postinstall feature which is the topic of the next module.
++
+
+[source,ini,role=execute,subs=attributes+]
+----
+# AAP Controller - mandatory
+# --------------------------
+controller_admin_password=r3dh4t1!
+controller_pg_host=aap2-database
+controller_pg_password=r3dh4t1!
+
+# AAP Controller - optional
+# -------------------------
+# To use the postinstall feature you need to set these variables
+controller_postinstall=true
+controller_license_file=/home/devops/manifest.zip
+controller_postinstall_dir=/home/devops/aap2-config-as-code 
+----
+
+. Configure the Common Variables - Automation Hub
++
+
+This section is straightforward and we will point at the same database as before.
++
+
+[source,ini,role=execute,subs=attributes+]
+----
+# AAP Automation Hub - mandatory
+# ------------------------------
+hub_admin_password=r3dh4t1!
+hub_pg_host=aap2-database
+hub_pg_password=r3dh4t1!
+----
+
+
+. Configure the Common Variables - Automation EDA (Event Driven Ansible)
++
+This section is straightforward and we will point at the same database as before.
++
+
+[source,ini,role=execute,subs=attributes+]
+----
+# AAP EDA Controller - mandatory
+# ------------------------------
+eda_admin_password=r3dh4t1!
+eda_pg_host=aap2-database
+eda_pg_password=r3dh4t1!
+controller_main_url=https://aap2.{subdomain}
+----
+
+== Part 1 of the Installation Configuration Complete
+
+You have now completed the first step of your configuration and if you were not using the new `postinstall` feature you should be ready to start the installation.
+Before moving on to the next module quickly do a simple `ping` to see that the Ansible Groups you configured are correct
++
+
+[source,sh]
+----
+ansible all -m ping -i inventory
+[source,ini,role=execute,subs=attributes+]
+----
++
+
+.Sample Output
+[source,texinfo]
+----
+aap2 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+----
+

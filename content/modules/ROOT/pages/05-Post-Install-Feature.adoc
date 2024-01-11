@@ -1,0 +1,126 @@
+= Postinstall Capability
+
+A new feature in the TechPreview Installer is the link:https://access.redhat.com/documentation/en-us/red_hat_ansible_automation_platform/2.4/html-single/containerized_ansible_automation_platform_installation_guide/index#using-postinstall_aap-containerized-installation[Postinstall] capability
+
+This enables your AAP2 infrastructure to come up both with its manifest already inserted but also Controller resources including:
+
+* Organizations
+* Inventories
+* Projects
+* Job Templates 
+
+Or any other resource capable of being installed by the powerful `infra.controller_configuration` link:https://galaxy.ansible.com/ui/repo/published/infra/controller_configuration/[collection] fully documented link:https://galaxy.ansible.com/ui/repo/published/infra/controller_configuration/docs/[here]. 
+
+You can actually view all the collections contained within the bundled installer with the `ansible-galaxy` command. You should have set the `ANSIBLE_COLLECTIONS_PATH` already earlier in the lab but for completeness included below.
+
+[source,sh,role=execute,subs=attributes+]
+----
+export ANSIBLE_COLLECTIONS_PATH=/home/devops/ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64/collections
+ansible-galaxy collection list
+----
+
+.Sample Output
+[source,texinfo]
+----
+Collection                      Version
+------------------------------- -------
+ansible.containerized_installer 1.2.3
+ansible.controller              4.4.2
+ansible.posix                   1.5.4
+community.crypto                2.15.1
+community.postgresql            3.2.0
+containers.podman               1.10.3
+infra.controller_configuration   2.5.1
+----
+
+[configure]
+== Create a Simple Postinstall Example
+
+In this section, we will create a very simple scenario simply creating some Organizations and a Project. After the installation is complete we will go further and do manual creation of a job_template just to get hands-on with the Contaierized AAP2 Console which is identical to other deployment platforms (Red Hat Enterprise Linux, OpenShift, or a Cloud Based AAP2 such as provided by Azure and AWS). 
+
+. Recall that in the prior lab whilst configuring the inventory you edited this section:
++
+
+As long as it matches the below no further edits should be necessary
++
+
+[source,sh,role=execute,subs=attributes+]
+----
+# AAP Controller - optional
+# -------------------------
+# To use the postinstall feature you need to set these variables
+controller_postinstall=true
+controller_license_file=/home/devops/manifest.zip
+controller_postinstall_dir=/home/devops/config-as-code
+----
+
+. Validate the Automation Controller manifest exists
++
+
+[source,sh,role=execute,subs=attributes+]
+----
+ls ~/manifest.zip
+----
++
+
+.Sample Output
+[source,texinfo]
+----
+/home/devops/manifest.zip
+----
+
+. Ensure you are in your home directory and create the config-as-code directory
++
+
+[source,sh,role=execute,subs=attributes+]
+----
+cd
+mkdir config-as-code
+----
+
+. Add a `controller` sub-directory for a good structure and `cd` into it
++
+
+[TIP]
+====
+This of course could easily be a Git Repositary which you could easily clone.
+====
++
+
+[source,sh,role=execute,subs=attributes+]
+----
+mkdir config-as-code/controller
+cd config-as-code/controller
+----
+
+. Create a new file `organizations.yml` and enter the following YAML list
++
+
+[TIP]
+====
+If you want to add further AAP2 Resources (Inventories, Projects etc) you can refer to the document linked earlier. For example here is the documentation for link:https://galaxy.ansible.com/ui/repo/published/infra/controller_configuration/content/role/organizations/[organizations]
+====
++
+
+[source,sh,role=execute,subs=attributes+]
+----
+controller_organizations:
+
+  - name: Default
+    description: "Default organization for resources"
+
+  - name: Engineering
+    description: "Engineering Organization"
+
+  - name: Sales
+    description: "Sales Organization"
+
+  - name: Marketing
+    description: "Marketing Organization"
+----
+
+== Summary
+
+In this, short, module we added the necessary files and directories to test out the new Postinstall feature available in the TechPreview AAP2 Installer.
+
+In the next module, we will run the Installer and start to explore the new infrastructure.

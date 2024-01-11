@@ -1,12 +1,29 @@
 
-* xref:02-Overview.adoc[1. Overview]
-** xref:02-Overview.adoc#repositories[Repositories]
-** xref:02-Overview.adoc#software[Software]
+* xref:01-Overview.adoc[1. Overview]
+** xref:01-Overview.adoc#repositories[Repositories]
+** xref:01-Overview.adoc#software[Software]
 
-* xref:03-Initial-Setup.adoc[2. Initial Setup]
-** xref:03-Initial-Setup.adoc#prerequisites[Install Prerequisites]
-** xref:03-Initial-Setup.adoc#container[Create the Installation Inventory]
+* xref:02-Initial-Setup.adoc[2. Initial Setup]
+** xref:02-Initial-Setup.adoc#prerequisites[Install Prerequisites]
+** xref:02-Initial-Setup.adoc#container[Create the Installation Inventory]
 
-* xref:04-AAP2-Install.adoc[3. Installation]
-** xref:04-AAP2-Install.adoc#repositories[Repositories]
-** xref:04-AAP2-Install.adoc#software[Software]
+* xref:03-AAP2-Backend-Setup.adoc[3. Installation]
+** xref:03-AAP2-Backend-Setup.adoc#repositories[Repositories]
+** xref:03-AAP2-Backend-Setup.adoc#software[Software]
+
+* xref:04-AAP2-Installer-Inventory.adoc[4. Configure the AAP2 Installer Inventory]
+
+* xref:05-Post-Install-Feature.adoc[5. Configure the Post Install Feature]
+** xref:05-Post-Install-Feature.adoc#configure[Configuration]
+
+* xref:06-Install-Your-Deployment.adoc[6. Explore your Environment]
+
+* xref:07-Explore-Your-Deployment.adoc[6. Explore your Environment]
+
+// * xref:07-Placeholder.adoc
+
+* xref:Resources-and-Credentials.adoc[Resources, Credentials, and Consoles]
+** xref:Resources-and-Credentials.adoc#resources[Resources]
+** xref:Resources-and-Credentials.adoc#consoles[Consoles]
+** xref:Resources-and-Credentials.adoc#ssh[SSH Settings]
+

@@ -43,7 +43,7 @@ ${CONTAINER_RUNTIME} \
   run --rm --name showroom-builder \
   --platform linux/amd64 \
   -v "./:/antora${volume_mount_flag}" \
-  docker.io/antora/antora default-site.yml
+  docker.io/antora/antora rh1-site.yml #default-site.yml
 
 echo "Build process complete. Check the ./www folder for the generated site."
 echo "To view the site locally, run the following command: utilities/lab-serve"

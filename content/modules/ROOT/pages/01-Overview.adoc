@@ -1,0 +1,271 @@
+:icons: font
+= Overview
+
+icon:clock-o[Duration: 10 Minutes] Duration - 10 minutes
+
+. In this module, we will explore our environments and get ready to install the Containerized version of AAP2 (Red Hat Ansible Automation Platform 2).
+
+== Lab Goals
+
+NOTE: Does this belong in the lab goals or the lab description?  
+
+* Install the Containerized version of AAP2
+** Automation Hub
+** Event Driven Automation
+** Postgres
+* Become familiar with different deployment options
+* Configure AAP2 Containerized
+* Explore the AAP2 Containerized environment
+** Storage 
+** Logs
+** Troubleshooting
+
+
+== Lab Topology
+
+// TODO: Add diagram
+
+ image::images/..png[Lab Topology,align="center",width="100%"]
+
+  * `bastion` - the terminals to your right are connected to this host via ssh as the `devops` user.
+  ** This host is where you will be primarily working from.
+  * The AAP2 Hosts
+  ** `aap2`
+
+  NOTE: All instances are running RHEL 9.3 and are sized appropriately for the lab.
+
+== Explore your environment
+
+Several artifacts and tools have been installed for you. Let's take a look at what is available.
+
+[source,sh]
+----
+tree -L 1
+.
+├── ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64.tar.gz <1>
+├── inventory 
+├── manifest.zip
+├── multi-tier-app-deployer
+└── postgres-tasks.yml
+----
+
+// community.postgresql
+
+== Initial Configuration
+
+TIP: Some of the packages we are installing are already installed. However, we are following the Installation Guide (LINK) here are it is worth seeing what dependencies are expected
+
+
+. Install Ansible and other dependencies
++
+
+[source,sh]
+----
+sudo dnf install -y ansible-core wget git rsync
+----
++
+
+.Sample Output
+[source,texinfo]
+----
+Updating Subscription Management repositories.
+Red Hat Enterprise Linux 9 for x86_64 - AppStream (RPMs)                                       126 kB/s | 4.5 kB     00:00
+Red Hat Enterprise Linux 9 for x86_64 - AppStream - Advanced Update Support (RPMs)             130 kB/s | 4.5 kB     00:00
+ <TRUNCATED>
+
+ Installed:
+  ansible-core-2.14.2-5.el9_2.x86_64                                 libnsl2-2.0.0-1.el9.x86_64
+  libtirpc-1.3.3-1.el9.x86_64                                        mpdecimal-2.5.1-3.el9.x86_64
+  python3.11-3.11.2-2.el9_2.1.x86_64                                 python3.11-cffi-1.15.1-1.el9.x86_64
+  python3.11-cryptography-37.0.2-5.el9.x86_64                        python3.11-libs-3.11.2-2.el9_2.1.x86_64
+  python3.11-pip-wheel-22.3.1-2.el9.noarch                           python3.11-ply-3.11-1.el9.noarch
+  python3.11-pycparser-2.20-1.el9.noarch                             python3.11-pyyaml-6.0-1.el9.x86_64
+  python3.11-setuptools-wheel-65.5.1-2.el9.noarch                    python3.11-six-1.16.0-1.el9.noarch
+  sshpass-1.09-4.el9.x86_64
+
+Complete!
+----
++
+
+Before progressing further ensure that Ansible is installed correctly and it is working correctly.
++
+
++
+[source,sh]
+----
+ansible --version
+----
++
+
+.Sample Output (Your output may vary)
+[source,texinfo]
+----
+ansible [core 2.13.3]
+  config file = /etc/ansible/ansible.cfg
+  configured module search path = ['/home/devops/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
+  ansible python module location = /usr/lib/python3.9/site-packages/ansible
+  ansible collection location = /home/devops/.ansible/collections:/usr/share/ansible/collections
+  executable location = /usr/bin/ansible
+  python version = 3.9.14 (main, Jan  9 2023, 00:00:00) [GCC 11.3.1 20220421 (Red Hat 11.3.1-2)]
+  jinja version = 3.1.2
+  libyaml = True
+----
++
+
+In your home directory of the `devops` user there is an inventory. Use this to confirm that ansible is working correctly and that your `ssh` configuration allows you to authenticate to all the hosts.
++
+
+[source,sh,role=execute]
+----
+ansible all -m ping -i inventory
+----
++
+
+.Sample Output
+[source,texinfo]
+----
+
+<TRUNCATED>
+
+aap2-database.aap2-02.internal | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3"
+    },
+    "changed": false,
+    "ping
+
+----
+
+NOTE: In the unlikey event that you see any failures, please ask for assistance.
+
+== Optional: Customization your Environment
+
+Your environment is now ready for you to customize, if there are tools and editors you prefer or shell settings, exports etc you would like to make.
+The lab will take approximately 60-90 minutes and. You can add your favorite tools, aliases, etc. to make your environment your own.
++
+
+| NOTE: Now is a great time to add any of your favorite tools `ripgrep`, `neovim` etc. You may also want to consider adjusting your environment to your taste or perhaps your `~/.vimrc`, ~/.bashrc` etc. You'll be on this host for 90 minutes so take a moment to make it your own.
+
+. First, we will get our Ansible environment set up. 
++
+
+[source,sh]
+----
+sudo dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
+----
++
+
+.Sample Output
+[source,texinfo]
+----
+...
+<TRUNCATED>
+
+Verifying        : epel-release-9-7.el9.noarch                                                                           1/1
+Installed products updated.
+
+Installed:
+  epel-release-9-7.el9.noarch
+
+Complete!
+
+----
++
+
+We will start by installing the `community.postgresql` collection. This collection will be used to install the PostgreSQL database server.
+
++
+[source,sh,role=execute]
+----
+ ansible-galaxy collection install community.postgresql
+----
++
+[source,sh,role=execute]
+----
+Starting galaxy collection install process
+Process install dependency map
+Starting collection install process
+Downloading https://galaxy.ansible.com/api/v3/plugin/ansible/content/published/collections/artifacts/community-postgresql-3.2.0.tar.gz to /home/devops/.ansible/tmp/ansible-local-31757gswwmzua/tmpgw8_marq/community-postgresql-3.2.0-7mkv5me6
+Installing 'community.postgresql:3.2.0' to '/home/devops/.ansible/collections/ansible_collections/community/postgresql'
+community.postgresql:3.2.0 was installed successfully
+----
++
+
+. Extract the bundled installer and change into the directory.
++
+
+* Mention x86 and ARM architectures are supported
+* bundles and unbudles installers
+** size of unbundled installers
+** sie of bundled installers
++
+
+[source,sh,role=execute]
+----
+tar -xvf ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64.tar.gz
+----
++
+
+.Output
+[source,sh,role=execute]
+----
+ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64/
+ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64/collections/
+ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64/collections/ansible_collections/
+ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64/collections/ansible_collections/ansible/
+ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64/collections/ansible_collections/ansible/controller/
+ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64/collections/ansible_collections/ansible/controller/MANIFEST
+.json
+
+<TRUNCATED>
+
+ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64/bundle/images/ee-supported-rhel8.tar.gz
+ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64/bundle/images/hub-rhel8.tar.gz
+ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64/bundle/images/hub-web-rhel8.tar.gz
+ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64/bundle/images/ee-29-rhel8.tar.gz
+ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64/bundle/images/postgresql-13.tar.gz
+ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64/bundle/images/redis-6.tar.gz
+----
++
+
+As you watch the airport, you might notice that really what we're doing is where unpackaging I'm at sport collection that contains the controller installer and other collections. Then near the end, you may notice that the bundle extracts a number of compressed container images and this is primarily because the controller installer will use these images to deploy the controller and the hub.
+
+. Change into the directory
++
+
+[source,sh]
+----
+cd ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64 
+----
+
+. Examine the basic structure of the installer
++
+
+[source,sh]
+----
+tree -L 2
+----
++
+
+.Sample Output
+[source,texinfo]
+----
+.
+├── bundle
+│   └── images
+├── collections
+│   └── ansible_collections
+├── inventory
+└── README.md
+----
+
+== Configuring the Inventory
+
+
+TIP: It is very easy for a subtle typo to cause a lot of frustration. Take care and double check your work.
+
+. Open the inventory file in your favorite editor (vim, nano, etc)
+
+
+. Setup your 
+

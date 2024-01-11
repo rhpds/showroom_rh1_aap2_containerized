@@ -6,15 +6,18 @@ nav:
 
 asciidoc:
   attributes:
-    # experimental: true
-    lab_name: "RH1 AAP2 Containerized"
-    # release-version: master
+    icons: font
     page-pagination: true
-    my_var: "foo - this is an asciidoc attribute from `content/antora.yml`"
+    # experimental: true
+    # release-version: master
+    lab_name: "RH1 AAP2 Containerized"
     guid: my-guid
-    ssh_user: devops
-    ssh_password: devops
+    subdomain: aap2-01.sandbox5.opentlc.com
+    subdomain_internal: aap2-01.internal
+    ssh_username: devops
     ssh_command: ssh devops@bastion.{guid}.example.opentlc.com
+    ssh_password: MjU4NDk2
+    targethost: bastion.aap2-01.sandbox5.opentlc.com
 
   extensions:
     - ./content/lib/tab-block.js
