@@ -1,82 +1,102 @@
-= Introduction
+= Overview and Goals
 
-Welcome to the {lab_name} lab. This lab will walk you through
+icon:clock-o[Duration: 10 Minutes] Duration: 10 minutes
 
-* 1
-* 2
-* Modules
+In this, opening, module, we will explore the lab goals, our environment and introduce the Ansible Automation Containerized Platform and get ready to install the Containerized version of Red Hat Ansible Automation Platform 2, typically referred to as AAP2 from now on for brevity.
 
-== The Modules
+== Lab Goals
 
-. Overview
-. The second module will walk you through
+* Understand that this Lab is built around a TechPreview
+* Understand the overall architecture and technologies of Ansible  
+* Become familiar with different deployment options
+* Install the Containerized version of AAP2
+** Automation Hub
+** Event Driven Automation
+** Postgres
+* Configure AAP2 Containerized via the Postinstall option
+* Explore the AAP2 Containerized environment
+** Storage 
+** Logs
+** Troubleshooting
+
+== The Lab Modules
+// TODO: Finalize doc names and fix links here:
+. Overview - this document you are currently reading
+. link:Resources-and-Credentials.html[Getting Setup], customize your environment. 
+. link:Resources-and-Credentials.html[Configure an External AAP2 Database]
+. The RepositoriesSoftwaresecond module will walk you through
 . The third module will walk you through
 . The fourth module will walk you through
 
+== Tech Preview
 
-== Credentials and Resources
+// TODO:
 
+=== Current Requirements
+
+// TODO: Add a requirements table
+
+[#topology]
+== Lab Topology
+
+The lab topology is quite simple
+// TODO: Update diagram
+
+image::topology.png[Lab Topology,align="center",width="100%"]
+
+
+[cols="15%,15%,15%,55%"]
+|===
+|Server |Operating System|External Interface|Role
+
+|bastion
+|RHEL 9.3
+|Yes
+|DevOps Server - you will primarily work from here
+
+|aap2
+|RHEL 9.3
+|Yes
+|Primary AAP2 Platform for Controller, Hub, EDA
+
+|aap2-backend
+|RHEL 9.3
+|No
+|Postgres database - you will install this 
+
+|app-frontend
+|RHEL 9.3
+|Yes
+|Simple frontend for test application
+
+|app-frontend
+|RHEL 9.3
+|No
+|Simple backend for test application
+
+|===
+
+
+////
+* `bastion` - the terminals to your right are connected to this host via ssh as the `devops` user.
+** This host is where you will be primarily working from.
+* The AAP2 Hosts
+** `aap2`
+
+NOTE: All instances are running RHEL 9.3 and are sized appropriately for the lab.
+
+////
+
+
+
+////
+
+[#resources]
+== Resources and Credentials 
+
+link:Resources-and-Credentials.html[Credentials and Resources]
 
 
 NOTE: The URLs for the AAP2 Infrastructure itself will, obviously, not respond until after you have successfully installed the AAP2 Infrastructure. 
 
 You will need to use the IP address of the AAP2 Infrastructure host in the URLs below.  The IP address of the AAP2 Infrastructure host is provided in the lab environment details page.
-
-
-
-
-Testing the Keycaps in asciidoc 
-
-
-
-////
-Your brilliance
-
-. Open a additional terminal with tmux by pressing kbd:[CTRL+b] then kbd:[c]
-
-== Variables
-
-Other vars can also be set there, such as `ssh_user` and `ssh_password`, and referenced inline in the lab content by using the `\{foo}` syntax.
-
-This is another var, or asciidoc attribute, from `./content/antora.yml` {my_var}
-
-== Writing your lab
-
-Whatever type of content you are writing we'll refer to your *content* as "your lab" in this document.
-
-=== Lab structure
-
-
-Wether you are writing a lab
-
-* First, we will build a monolithic application already compiled as RPM packages and put it into a container. This will allow us to deploy the application, copy it between machines, and update it separately from the operating system. This process affords us a portable and easily maintained component instead of tightly coupling the application with your operating system maintenance.
-
-* In closing we will build a second container on a different operating system version that makes an application not packaged into RPMs. This will be similar to a web application deployment, positioning the correct files at the right locations. To do this, we will pull a project from GitHub and position the component files within our container image. The purpose of this is to achieve a portable application container that can deploy on several different versions of Red Hat Enterprise Linux. This also provides the benefit of decoupling your application maintenance, which would all happen by building new containers versus operating system maintenance. The container is no longer reliant on the operating system installed on the machine where the application is deployed.
-
-
-. Now let's examine this cluster a bit more by describing the cluster (the `$GUID` environment variable is already set for you so you can immediately describe your individual cluster):
-+
-[source,sh,role=execute]
-----
-podman ps
-----
-+
-.Sample Output
-[source,texinfo,subs="attributes"]
-----
-CONTAINER ID  IMAGE                        COMMAND           CREATED      STATUS      PORTS                 NAMES
-2dcfee9e50c4  {guid} docker.io/library/httpd:2.4  httpd-foreground  3 hours ago  Up 3 hours  0.0.0.0:8080->80/tcp  showroom-httpd
-----
-
-
-
-
-////
-
-
-
-
-=== Lab Access
-
-The terminal window to your right is *already* logged into the lab environment as the `{ssh_user}` user via `ssh`. 
-All steps of this lab are to be completed as the `{ssh_user}` user.

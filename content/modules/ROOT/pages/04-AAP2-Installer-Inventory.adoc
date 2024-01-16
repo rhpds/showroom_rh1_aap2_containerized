@@ -1,9 +1,15 @@
-:subdomain: aap2-01.sandbox5.opentlc.com
+// :subdomain: aap2-01.sandbox5.opentlc.com
 = Getting Setup
+
+icon:clock-o[Duration: 10 Minutes] Duration: 10 minutes
 
 Now we are ready to configure our installation. In your home directory, you will find a compressed profile with the unable automation platform container installer.
 
-Remember, currently, this is still a tech preview and you can read more details about what Redhat means by tech preview here. The installer is available for Redhat enterprise Lennox across to architectures X 86 and arm. In addition, it is available in two formats, a lightweight installer, which assumes both Internet access and a red heart network login. The other installer used here is the bundled installer which includes all its dependencies, including the container images for the major components and for the execution, environments, etc. We will explore these during the installation process.
+Remember, currently, as discussed in Module 1, this is still a Tech Preview. The installer is available for Red Hat Enterprise Linux across 2 architectures x86 and Arm. In addition, it is available in two formats, a lightweight installer, which assumes both Internet access and a Red Hat Network login. 
+
+The other installer used here is the bundled installer which includes all its dependencies, including the container images for the major components and also for the execution environments, etc. We will explore these during the installation process.
+
+We have chosen to use the full bundled installer for this lab.
 
 == Unpack and Explore the Installer
 
@@ -45,16 +51,14 @@ ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64/bundle/image
 . Change directory into the installer directory
 +
 
-[source,sh]
 [source,ini,role=execute,subs=attributes+]
 ----
 cd ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64
 ----
 
-. Explore the basic structure, for example `tree -L 3` gives an informative overview
-
+. Explore the basic structure, for example, `tree -L 3` gives an informative overview
 +
-[source,sh]
+
 [source,ini,role=execute,subs=attributes+]
 ----
  tree -L 3
@@ -104,7 +108,7 @@ less README.md
 
 == Configuring your Inventory
 
-In this section you will configure your inventory, logically this can be seen as 5 main componets
+In this section you will configure your inventory, logically this can be seen as 5 main components
 
 
 . Automation Controller
@@ -139,7 +143,7 @@ As you can see the inventory is partially configured for a local install eg on a
 +
 
 [NOTE]
-In our example all `ssh` is setup already, feel free to explore `/home/devops/.ssh/config` In many cases you may need to make changes either there or in the inventory file. A good simple test is `ansible all -m ping -i inventory` to validate configuration and ssg setup.
+In our example, all `ssh` is set up already, feel free to explore `/home/devops/.ssh/config` In many cases you may need to make changes either there or in the inventory file. A good simple test is `ansible all -m ping -i inventory` to validate configuration and ssg setup.
 +
 
 [source,ini,role=execute,subs=attributes+]
@@ -222,7 +226,7 @@ In the field, if you are not copying from a lab don't forget that the `bundle_di
 . Configure the Common Variables - Controller
 +
 
-In this section, we will configure the Controller, and associate it with the Postgres instance we configured earlier. Getting slightly ahead of ourselves we will also do the initial setup of the *new* postinstall feature which is the topic of the next module.
+In this section, we will configure the Controller, and associate it with the Postgres instance we configured earlier. Getting slightly ahead of ourselves we will also do the initial setup of the *new* Postinstall feature which is the topic of the next module.
 +
 
 [source,ini,role=execute,subs=attributes+]
@@ -256,9 +260,9 @@ hub_pg_host=aap2-database
 hub_pg_password=r3dh4t1!
 ----
 
-
 . Configure the Common Variables - Automation EDA (Event Driven Ansible)
 +
+
 This section is straightforward and we will point at the same database as before.
 +
 
@@ -275,13 +279,13 @@ controller_main_url=https://aap2.{subdomain}
 == Part 1 of the Installation Configuration Complete
 
 You have now completed the first step of your configuration and if you were not using the new `postinstall` feature you should be ready to start the installation.
-Before moving on to the next module quickly do a simple `ping` to see that the Ansible Groups you configured are correct
+
+. Before moving on to the next module quickly do a simple `ping` to see that the Ansible Groups you configured are correct
 +
 
-[source,sh]
+[source,ini,role=execute,subs=attributes+]
 ----
 ansible all -m ping -i inventory
-[source,ini,role=execute,subs=attributes+]
 ----
 +
 

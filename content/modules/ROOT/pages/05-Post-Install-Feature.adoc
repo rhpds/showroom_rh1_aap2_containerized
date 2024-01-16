@@ -1,5 +1,7 @@
 = Postinstall Capability
 
+icon:clock-o[Duration: 10 Minutes] Duration: 10 minutes
+
 A new feature in the TechPreview Installer is the link:https://access.redhat.com/documentation/en-us/red_hat_ansible_automation_platform/2.4/html-single/containerized_ansible_automation_platform_installation_guide/index#using-postinstall_aap-containerized-installation[Postinstall] capability
 
 This enables your AAP2 infrastructure to come up both with its manifest already inserted but also Controller resources including:
@@ -11,7 +13,7 @@ This enables your AAP2 infrastructure to come up both with its manifest already 
 
 Or any other resource capable of being installed by the powerful `infra.controller_configuration` link:https://galaxy.ansible.com/ui/repo/published/infra/controller_configuration/[collection] fully documented link:https://galaxy.ansible.com/ui/repo/published/infra/controller_configuration/docs/[here]. 
 
-You can actually view all the collections contained within the bundled installer with the `ansible-galaxy` command. You should have set the `ANSIBLE_COLLECTIONS_PATH` already earlier in the lab but for completeness included below.
+You can view all the collections contained within the bundled installer with the `ansible-galaxy` command. You should have set the `ANSIBLE_COLLECTIONS_PATH` already earlier in the lab but for completeness included below.
 
 [source,sh,role=execute,subs=attributes+]
 ----

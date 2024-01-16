@@ -274,3 +274,29 @@ Verify that the application is running by navigating to
 
 http://bastion.{guid}.example.opentlc.com:8500
 
+example-image
+////
+image::images/example-image.png[Lab Topology,align="center",width="100%"]
+image::assets/images/example-image.png[Lab Topology,align="center",width="100%"]
+////
+
+
+
+Testing the Keycaps in asciidoc 
+
+
+
+////
+Your brilliance
+
+. Open a additional terminal with tmux by pressing kbd:[CTRL+b] then kbd:[c]
+
+== Variables
+
+Other vars can also be set there, such as `ssh_user` and `ssh_password`, and referenced inline in the lab content by using the `\{foo}` syntax.
+
+This is another var, or asciidoc attribute, from `./content/antora.yml` {my_var}
+
+== Writing your lab
+
+Whatever type of content you are writing we'll refer to your *content* as "your lab" in this document.

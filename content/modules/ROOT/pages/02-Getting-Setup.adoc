@@ -1,65 +1,45 @@
-:icons: font
-= Overview
+// :icons: font
 
-icon:clock-o[Duration: 10 Minutes] Duration - 10 minutes
-
-. In this module, we will explore our environments and get ready to install the Containerized version of AAP2 (Red Hat Ansible Automation Platform 2).
-
-== Lab Goals
-
-NOTE: Does this belong in the lab goals or the lab description?  
-
-* Install the Containerized version of AAP2
-** Automation Hub
-** Event Driven Automation
-** Postgres
-* Become familiar with different deployment options
-* Configure AAP2 Containerized
-* Explore the AAP2 Containerized environment
-** Storage 
-** Logs
-** Troubleshooting
-
-
-== Lab Topology
-
-// TODO: Add diagram
-
- image::images/..png[Lab Topology,align="center",width="100%"]
-
-  * `bastion` - the terminals to your right are connected to this host via ssh as the `devops` user.
-  ** This host is where you will be primarily working from.
-  * The AAP2 Hosts
-  ** `aap2`
-
-  NOTE: All instances are running RHEL 9.3 and are sized appropriately for the lab.
+icon:clock-o[Duration: 10 Minutes] Duration: 10 minutes
 
 == Explore your environment
 
 Several artifacts and tools have been installed for you. Let's take a look at what is available.
 
-[source,sh]
+1. Explore your environment with `tree`
++
+
+[source,ini,role=execute,subs=attributes+]
 ----
 tree -L 1
+----
++
+
+.Sample Output
+[source,texinfo]
+----
 .
 ├── ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64.tar.gz <1>
-├── inventory 
-├── manifest.zip
-├── multi-tier-app-deployer
-└── postgres-tasks.yml
+├── inventory <2>
+├── manifest.zip <3>
+├── postgres-for-aap2 <4>
+└── solution <5>
 ----
 
-// community.postgresql
+. The Containerized AAP2 Installer - bundled version
+. A sample `inventory` for the entire lab infrastructure
+. An AAP2 Manifest - injected in Module 6
+. A simple Postres installer repositary
+. A sample solution repo for reference
 
 == Initial Configuration
 
-TIP: Some of the packages we are installing are already installed. However, we are following the Installation Guide (LINK) here are it is worth seeing what dependencies are expected
-
+TIP: Some of the packages we are installing are already installed. However, we are following the link:https://access.redhat.com/documentation/en-us/red_hat_ansible_automation_platform/2.4/html-single/containerized_ansible_automation_platform_installation_guide/index#system_requirements[Installation Guide] here are it is worth seeing what dependencies are expected
 
 . Install Ansible and other dependencies
 +
 
-[source,sh]
+[source,ini,role=execute,subs=attributes+]
 ----
 sudo dnf install -y ansible-core wget git rsync
 ----
@@ -87,11 +67,10 @@ Complete!
 ----
 +
 
-Before progressing further ensure that Ansible is installed correctly and it is working correctly.
+. Before progressing further ensure that Ansible is installed correctly and it is working correctly.
 +
 
-+
-[source,sh]
+[source,ini,role=execute,subs=attributes+]
 ----
 ansible --version
 ----
@@ -112,10 +91,10 @@ ansible [core 2.13.3]
 ----
 +
 
-In your home directory of the `devops` user there is an inventory. Use this to confirm that ansible is working correctly and that your `ssh` configuration allows you to authenticate to all the hosts.
+In your home directory of the `devops` user, there is an inventory. Use this to confirm that Ansible is working correctly and that your `SSH` configuration allows you to authenticate to all the hosts.
 +
 
-[source,sh,role=execute]
+[source,ini,role=execute,subs=attributes+]
 ----
 ansible all -m ping -i inventory
 ----
@@ -135,21 +114,22 @@ aap2-database.aap2-02.internal | SUCCESS => {
     "ping
 
 ----
++
 
-NOTE: In the unlikey event that you see any failures, please ask for assistance.
+NOTE: In the unlikely event that you see any failures, please ask for assistance.
 
 == Optional: Customization your Environment
 
 Your environment is now ready for you to customize, if there are tools and editors you prefer or shell settings, exports etc you would like to make.
-The lab will take approximately 60-90 minutes and. You can add your favorite tools, aliases, etc. to make your environment your own.
+The lab will take approximately 60-90 minutes so you can take a moment to add your favorite tools, aliases, etc. to make your environment your own.
+For example any of your favorite tools such as linters, `ripgrep`, `neovim` etc. 
+
+You may also want to consider adjusting your environment to your taste or perhaps your `~/.vimrc`, ~/.bashrc` etc. You'll be on this host for 90 minutes so take a moment to make it your own.
+
+. If you want to install any tools from EPEL you can use the following command to add EPEL. In Production, we would recommend not using EPEL.
 +
 
-| NOTE: Now is a great time to add any of your favorite tools `ripgrep`, `neovim` etc. You may also want to consider adjusting your environment to your taste or perhaps your `~/.vimrc`, ~/.bashrc` etc. You'll be on this host for 90 minutes so take a moment to make it your own.
-
-. First, we will get our Ansible environment set up. 
-+
-
-[source,sh]
+[source,ini,role=execute,subs=attributes+]
 ----
 sudo dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
 ----
@@ -168,10 +148,10 @@ Installed:
   epel-release-9-7.el9.noarch
 
 Complete!
-
 ----
 +
 
+////
 We will start by installing the `community.postgresql` collection. This collection will be used to install the PostgreSQL database server.
 
 +
@@ -262,10 +242,10 @@ tree -L 2
 == Configuring the Inventory
 
 
-TIP: It is very easy for a subtle typo to cause a lot of frustration. Take care and double check your work.
+TIP: It is very easy for a subtle typo to cause a lot of frustration. Take care and double-check your work.
 
 . Open the inventory file in your favorite editor (vim, nano, etc)
 
-
 . Setup your 
 
+////
