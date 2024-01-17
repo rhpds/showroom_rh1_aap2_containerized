@@ -51,7 +51,7 @@ This lab preplaces a simple Postgres installer already configured to work in our
 . Change into the Postgres installer repository directory
 +
 
-[source,sh]
+[source,sh,role=execute,subs=attributes+]
 ----
 cd postgres-for-aap2
 ----
@@ -59,7 +59,7 @@ cd postgres-for-aap2
 . Explore the Postgres installer - it is quite simple in its construction
 +
 
-[source,sh]
+[source,sh,role=execute,subs=attributes+]
 ----
 tree -L 2
 ----
@@ -119,22 +119,39 @@ ansible-playbook install-postgresql.yml
 .Sample Output
 [source,texinfo]
 ----
-<<PUT FRESH output here>>
-// TODO: Fix output for postgres install
+<TRUNCATED OUTPUT>
+TASK [geerlingguy.postgresql : Ensure PostgreSQL users are present.] *************************************
+changed: [aap2-database] => (item=None)
+changed: [aap2-database]
+
+TASK [geerlingguy.postgresql : Ensure PostgreSQL databases are present.] *********************************
+
+TASK [geerlingguy.postgresql : Ensure PostgreSQL users are configured correctly.] ************************
+ok: [aap2-database] => (item=None)
+ok: [aap2-database]
+
+RUNNING HANDLER [geerlingguy.postgresql : restart postgresql] ********************************************
+[WARNING]: Ignoring "sleep" as it is not used in "systemd"
+changed: [aap2-database]
+
+PLAY RECAP ***********************************************************************************************
+aap2-database              : ok=28   changed=10   unreachable=0    failed=0    skipped=8    rescued=0    ignored=0   
 ----
 +
 
-TIP: Several of the most common issues we see with remote Postgres installations include:
-+
---
+[TIP]
+====
+Several of the most common issues we see with remote Postgres installations include:
+
 . Ensuring that Postgres listens on an *external* network interfaces
-. Password authentication is setup correctly
+. Password authentication is set up correctly
 . Firewalls and Cloud Security Groups are configured
 ** In our case we have preconfigured AWS Security Groups and Firewalld
---
+
+====
 +
 
-If you are curious as to the first 2 points, they are configured in `group_vars/aap2_databases.yml` and the role.
+If you are curious as to the first 2 points, they are configured in the vars in `group_vars/aap2_databases.yml` and then set via the `geerlingguy.postgresql` role.
 
 ////
 ==== Basic Checklist for broken Postgres Installs

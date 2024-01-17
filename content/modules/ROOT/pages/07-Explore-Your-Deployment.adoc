@@ -1,361 +1,192 @@
-= Getting Setup
+= Using Containerized AAP2
 
-* Install Ansible and other dependencies
-*
+Whilst we have lightly touched on the new Postinstall capability built on top of the foo collection in this Bonus lab we will actually setup a simple AAP2 job_template and assocaited resources. We will do this manually as it allows us to experiewnce the Containerized AAP2 UI (User Interface) and realize that it is identical to the Ansible Automation Controller UI from an instance/VM based install and indeed an OpenShift install.
 
-My guid is {guid}
+== Run the 
+. Log in to your Controller Console as user: `admin` password: `r3dh4t1!`
++
 
-.Test 1
-[source,sh]
-----
-My guid is {guid}
-----
+[cols="3,2,2"]
+|===
+|URL |Login |Password
 
-.Test 2 role=execute
-// [source,sh,role=execute]
+|`http://aap2.{subdomain}:80`
+| `admin`
+| `r3dh4t1!`
+
+|===
++
+
+image::controller_homescreen.png[Lab Topology,align="center",width="100%"]
++
+
+[TIP]
+==== 
+As mentioned earlier the installer has *not* installed valid certificates so your browser will warn you of this. 
+====
+
+. Explore the *Resources* section to validate that the Postinstall feature did indeed create the resources you specified in your `config-as-code/controller` directory.
++
+
+image::controller_dashboard.png[Lab Topology,align="center",width="100%"]
+
+. Now navigate the the *Templates* screen and open the *rh1-demo-job-template*
++
+
+image::controller_templates.png[Lab Topology,align="center",width="100%"]
+
++
+
+image::job_template.png[Lab Topology,align="center",width="100%"]
+
+. Launch the *Job Template* via the *Launch* button
+
+== Verify your Job Template ran successfully
+
+. The simple app you just deployed includes an API endpoint `app-frontend:8000/api/resources` - test this via `curl` 
++
+
 [source,sh,role=execute,subs=attributes+]
 ----
-My guid is {guid}
-----
-
-.Test 2.5 role=copypaste
-[source,sh,role="copypaste",subs=attributes+]
-----
-My guid is {guid}
-----
-
-.Test 3 % query string
-[source,sh,role=execute]
-----
-My guid is %guid%
-----
-
-.Test 4 % but attribute
-[source,sh,role=execute]
-----
-My my_var is %my_var%
-----
-== Explore your environment
-
-Several artifacts and tools have been installed for you. Let's take a look at what is available.
-
+curl app-frontend:8000/api/resources | jq
++
 [source,sh]
 ----
-tree -L 1
-.
-├── ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64.tar.gz <1>
-├── inventory 
-├── manifest_31_10_2022.zip
-├── multi-tier-app-deployer
-└── postgres-tasks.yml
+
+----
++
+.Sample Output
+[source,texinfo]
 ----
 
-
-
-community.postgresql
-
-
-community.postgresql
-
-== Initial Configuration
-
-| NOTE: Now is a great time to add any of your favorite tools `rg`, `nvim` etc. You'll be on this host for ~90 minutes so take a moment to make it your own. 
-
-. First, we will get our Ansible environment set up. 
-+
-TIP: Some of the packages we are installing are already installed. However, we are following the Installation Guide (LINK) here are it is worth seeing what dependencies are expected
-+
-
-[source,sh]
 ----
-sudo dnf install -y ansible-core wget git rsync
 ----
 +
 
 .Sample Output
 [source,texinfo]
 ----
-Updating Subscription Management repositories.
-Red Hat Enterprise Linux 9 for x86_64 - AppStream (RPMs)                                       126 kB/s | 4.5 kB     00:00
-Red Hat Enterprise Linux 9 for x86_64 - AppStream - Advanced Update Support (RPMs)             130 kB/s | 4.5 kB     00:00
- <TRUNCATED>
-
- Installed:
-  ansible-core-2.14.2-5.el9_2.x86_64                                 libnsl2-2.0.0-1.el9.x86_64
-  libtirpc-1.3.3-1.el9.x86_64                                        mpdecimal-2.5.1-3.el9.x86_64
-  python3.11-3.11.2-2.el9_2.1.x86_64                                 python3.11-cffi-1.15.1-1.el9.x86_64
-  python3.11-cryptography-37.0.2-5.el9.x86_64                        python3.11-libs-3.11.2-2.el9_2.1.x86_64
-  python3.11-pip-wheel-22.3.1-2.el9.noarch                           python3.11-ply-3.11-1.el9.noarch
-  python3.11-pycparser-2.20-1.el9.noarch                             python3.11-pyyaml-6.0-1.el9.x86_64
-  python3.11-setuptools-wheel-65.5.1-2.el9.noarch                    python3.11-six-1.16.0-1.el9.noarch
-  sshpass-1.09-4.el9.x86_64
-
-Complete!
-
-----
-+
-
-Let's just check Ansible is installed correctly and it is working. In the home directory of the `devops` user there is an inventory it is all working.
-+
-
-[source,sh,role=execute]
-----
-[devops@bastion ~]$ ansible all -m ping -i multi-tier-inventory
-----
-+
-
-
-
-
-We will be using the `community.postgresql` collection to install the PostgreSQL database server.
-
-
-We will start by installing the `community.postgresql` collection. This collection will be used to install the PostgreSQL database server.
-
-+
-[source,sh,role=execute]
-----
- ansible-galaxy collection install community.postgresql
-----
-+
-[source,sh,role=execute]
-----
-Starting galaxy collection install process
-Process install dependency map
-Starting collection install process
-Downloading https://galaxy.ansible.com/api/v3/plugin/ansible/content/published/collections/artifacts/community-postgresql-3.2.0.tar.gz to /home/devops/.ansible/tmp/ansible-local-31757gswwmzua/tmpgw8_marq/community-postgresql-3.2.0-7mkv5me6
-Installing 'community.postgresql:3.2.0' to '/home/devops/.ansible/collections/ansible_collections/community/postgresql'
-community.postgresql:3.2.0 was installed successfully
-----
-
-
-
-Extract the bundled installer and change into the directory.
-
-* Mention x86 and ARM architectures are supported
-* bundles and unbudles installers
-** size of unbundled installers
-** sie of bundled installers
-
-
-
-[source,sh,role=execute]
-----
-[devops@bastion ~]$ tar -xvf ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64.tar.gz
-----
-.Output
-[source,sh,role=execute]
-----
-ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64/
-ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64/collections/
-ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64/collections/ansible_collections/
-ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64/collections/ansible_collections/ansible/
-ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64/collections/ansible_collections/ansible/controller/
-ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64/collections/ansible_collections/ansible/controller/MANIFEST
-.json
-
 <TRUNCATED>
 
-ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64/bundle/images/ee-supported-rhel8.tar.gz
-ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64/bundle/images/hub-rhel8.tar.gz
-ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64/bundle/images/hub-web-rhel8.tar.gz
-ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64/bundle/images/ee-29-rhel8.tar.gz
-ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64/bundle/images/postgresql-13.tar.gz
-ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64/bundle/images/redis-6.tar.gz
+    "source": "Blog",
+    "url": "http://www.cloudassembler.com/"
+  },
+  {
+    "author": "Aditya Patawari, Vikas Aggarwal",
+    "description": "Overview of Ansible in common Cloud Environments",
+    "id": 4,
+    "name": "Ansible 2 Cloud Automation Cookbook",
+    "source": "Book",
+    "url": "https://www.packtpub.com/virtualization-and-cloud/ansible-2-cloud-automation-cookbook"
+  }
+]
 ----
 
+== Summary and Bonus Activities
 
- as you watch the airport, you might notice that really what we're doing is where unpackaging I'm at sport collection that contains the controller installer and other collections. Then near the end, you may notice that the bundle extracts a number of compressed container images and this is primarily because the controller installer will use these images to deploy the controller and the hub.
+Congratulations you have now completed the lab *but* should you have time to spare then areas to explore include:
 
+. `ssh` to the `aap2` host
 
+[source,sh,role=execute,subs=attributes+]
+----
+ssh aap2
+----
 
-. Change into the directory
-
-. Examine the basic structure of the installer
+. On the host `app2` you can explore the running Services
 +
 
-[source,sh]
+[source,sh,role=execute,subs=attributes+]
 ----
-tree -L 2
+systemctl list-units --type=service --state=running --user
 ----
 +
 
 .Sample Output
 [source,texinfo]
 ----
-.
-├── bundle
-│   └── images
-├── collections
-│   └── ansible_collections
-├── inventory
-└── README.md
+  UNIT                                  LOAD   ACTIVE SUB     DESCRIPTION
+  automation-controller-rsyslog.service loaded active running Podman automation-controller-rsyslog.service
+  automation-controller-task.service    loaded active running Podman automation-controller-task.service
+  automation-controller-web.service     loaded active running Podman automation-controller-web.service
+  automation-eda-api.service            loaded active running Podman automation-eda-api.service
+  automation-eda-daphne.service         loaded active running Podman automation-eda-daphne.service
+  automation-eda-web.service            loaded active running Podman automation-eda-web.service
+  automation-eda-worker-1.service       loaded active running Podman automation-eda-worker-1.service
+  automation-eda-worker-2.service       loaded active running Podman automation-eda-worker-2.service
+  automation-hub-api.service            loaded active running Podman automation-hub-api.service
+  automation-hub-content.service        loaded active running Podman automation-hub-content.service
+  automation-hub-web.service            loaded active running Podman automation-hub-web.service
+  automation-hub-worker-1.service       loaded active running Podman automation-hub-worker-1.service
+  automation-hub-worker-2.service       loaded active running Podman automation-hub-worker-2.service
+  dbus-broker.service                   loaded active running D-Bus User Message Bus
+  receptor.service                      loaded active running Podman receptor.service
+  redis.service                         loaded active running Podman redis.service
+
+LOAD   = Reflects whether the unit definition was properly loaded.
+ACTIVE = The high-level unit activation state, i.e. generalization of SUB.
+SUB    = The low-level unit activation state, values depend on unit type.
+16 loaded units listed.
 ----
 
-
-== Configuring the Inventory
-
-
-TIP: It is very easy for a subtle typo to cause a lot of frustration. Take care and double check your work.
-
-. Open the inventory file in your favorite editor (vim, nano, etc)
-
-
-
-
-. Setup your 
-
-
-
-
-
-
-
-
-== Downloading the UBI
-
-In this lab, you will be installing software into the container 
-image running as an interactive application. To do this you will
-need `yum`, but do not need `systemd` for managing services within the
-container environment.  For that reason, you will be using the *Standard*
-UBI image (as opposed to the Minimal or Multi-service images).
-
-Using the "buildah from" command will download and meld the container image. This particular image we are using is the Red Hat Universal Base Image or UBI. From the ourput of the command, you will notice that we are pulling down the latest one, which is for RHEL 9. 
-
-. Execute the  download the Standard UBI
-image from Red Hat's registry.
-
+. You can explore/list these services with `podman ps`
 +
-[source,sh,role=execute]
+
+[source,sh,role=execute,subs=attributes+]
 ----
-buildah from registry.access.redhat.com/ubi9/ubi
+systemctl list-units --type=service --state=running --user
 ----
-
-[#repositories]
-== Installing Repositories
-In this lab, you are going to containerize a software package that is already
-packaged in RPM format and stored in the Extra Packages for Enterprise Linux
-(EPEL) repository.
-
-Software often has requirements for prerequisite software that must be installed
-on the machine for it to work properly.  `yum` will resolve those
-dependencies for you, as long as it can locate the required packages in
-repositories defined on the machine.  The Red Hat Universal Base Image (UBI)
-downloaded in the previous step has access to some Red Hat Enterprise Linux
-repositories.  However, the target package for the lab is from EPEL.  
-
-. In the command below, `buildah` is going to run a command on the
-`ubi-working-container` image.  The `--` indicates that the command should be
-executed from within the container, which means the results will be applied into
-the container image.  Lastly, you are providing the `yum` command to install a
-package that defines all of the repositories from EPEL, `epel-release-latest-9`.
-
 +
-[source,bash]
+
+.Sample Output
+[source,texinfo]
 ----
-buildah run ubi-working-container -- yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
+CONTAINER ID  IMAGE                                                                             COMMAND               CREATED       STATUS          PORTS       NAMES
+558d20985b0e  registry.redhat.io/rhel8/redis-6:latest                                           run-redis             22 hours ago  Up 2 hours ago              redis
+ce1b3f5b1af3  registry.redhat.io/ansible-automation-platform-24/ee-supported-rhel8:latest       /usr/bin/receptor...  22 hours ago  Up 2 hours ago              receptor
+e8174b595959  registry.redhat.io/ansible-automation-platform-24/controller-rhel8:latest         /usr/bin/launch_a...  21 hours ago  Up 2 hours ago              automation-controller-rsyslog
+9527103dc199  registry.redhat.io/ansible-automation-platform-24/controller-rhel8:latest         /usr/bin/launch_a...  21 hours ago  Up 2 hours ago              automation-controller-task
+67550c656f89  registry.redhat.io/ansible-automation-platform-24/controller-rhel8:latest         /usr/bin/launch_a...  21 hours ago  Up 2 hours ago              automation-controller-web
+cdf5c870108b  registry.redhat.io/ansible-automation-platform-24/eda-controller-rhel8:latest     gunicorn --bind 1...  21 hours ago  Up 2 hours ago              automation-eda-api
+ad4658314bf5  registry.redhat.io/ansible-automation-platform-24/eda-controller-rhel8:latest     daphne -b 127.0.0...  21 hours ago  Up 2 hours ago              automation-eda-daphne
+4cb9d1393bc4  registry.redhat.io/ansible-automation-platform-24/eda-controller-ui-rhel8:latest  /bin/sh -c nginx ...  21 hours ago  Up 2 hours ago              automation-eda-web
+1bf7818b5c01  registry.redhat.io/ansible-automation-platform-24/eda-controller-rhel8:latest     aap-eda-manage rq...  21 hours ago  Up 2 hours ago              automation-eda-worker-1
+4fe655d086bf  registry.redhat.io/ansible-automation-platform-24/eda-controller-rhel8:latest     aap-eda-manage rq...  21 hours ago  Up 2 hours ago              automation-eda-worker-2
+e581c53b554c  registry.redhat.io/ansible-automation-platform-24/hub-rhel8:latest                pulp-api              21 hours ago  Up 2 hours ago              automation-hub-api
+fa165ebe3672  registry.redhat.io/ansible-automation-platform-24/hub-rhel8:latest                pulp-content          21 hours ago  Up 2 hours ago              automation-hub-content
+018b41b8c61c  registry.redhat.io/ansible-automation-platform-24/hub-web-rhel8:latest            nginx -g daemon o...  21 hours ago  Up 2 hours ago              automation-hub-web
+68aefbf7b4c6  registry.redhat.io/ansible-automation-platform-24/hub-rhel8:latest                pulp-worker           21 hours ago  Up 2 hours ago              automation-hub-worker-1
+40234e5517c4  registry.redhat.io/ansible-automation-platform-24/hub-rhel8:latest                pulp-worker           21 hours ago  Up 2 hours ago              automation-hub-worker-2
 ----
 
-
-. You can verify that the above command did not install the RPM on the host system.
-
+. Examine the logs of a running service (container) with `podman logs <service-name>`
 +
-[source,bash]
-----
-rpm -q epel-release
-----
 
-NOTE: If your repository configurations are not distributed as an RPM, but instead as
-individual `.repo` files, you could use the `buildah copy` command to copy
-files from the host operating system into the container image.  You will see
-an example of using `buildah copy` later in this lab.
-
-[#software]
-== Installing Software
-
-
-. Now that the yum repositories are defined within the container, execute 
-another `yum install`, within the container, to install the target
-software: `moon-buggy`.
-
+[TIP] 
+====
+The Service name is the last field in each row of output from `podman ps` ie the NAMES column
+====
 +
-[source,bash]
+
+[source,sh,role=execute,subs=attributes+]
 ----
-buildah run ubi-working-container -- yum -y install moon-buggy
+podman logs automation-controller-task
 ----
-
-
-== Committing the Container Image
-
-. At this point, the container is configured.  It is time to transition from a
-working container into a committed image.  In the command below, you will use
-the `buildah` command to commit the working container to an image called:
-`moon-buggy`.
-
 +
-[source,bash]
+
+.Sample Output
+[source,texinfo]
 ----
-buildah commit ubi-working-container moon-buggy
-----
-
-+
-. The output of `podman image list` should confirm the image was created.
-
-+
-[source,bash]
-----
-podman image list
-----
-
-
-== Deploy the Container
-
-Now the software has been installed and a new container image created.  It is
-time to spawn a runtime of the container image and validate the software.  The
-software we are using is a command line command.  
-
-. When you `run` the container,
-it will be in interactive (`-it`) mode, based on the `moon-buggy` container
-image and the command run interactively will be `/usr/bin/moon-buggy`.
-
-+
-[source,bash]
-----
-podman run -it moon-buggy /usr/bin/moon-buggy
+<TRUNCATED>
+2024-01-17 00:46:57,357 INFO     [32ce8bef076945d0bfda781d6c79d205] awx.analytics.job_lifecycle job-37 running playbook
+2024-01-17 00:46:57,374 INFO     [32ce8bef076945d0bfda781d6c79d205] awx.analytics.job_lifecycle job-37 work unit id received
+2024-01-17 00:46:57,443 INFO     [32ce8bef076945d0bfda781d6c79d205] awx.analytics.job_lifecycle job-37 work unit id assigned
+2024-01-17 00:47:56,421 INFO     [-] awx.analytics.job_lifecycle job-37 stats wrapup finished
+2024-01-17 00:47:56,902 INFO     [32ce8bef076945d0bfda781d6c79d205] awx.main.commands.run_callback_receiver Starting EOF event processing for Job 37
+2024-01-17 00:47:56,905 INFO     [32ce8bef076945d0bfda781d6c79d205] awx.analytics.job_lifecycle job-37 post run
+2024-01-17 00:47:57,082 INFO     [32ce8bef076945d0bfda781d6c79d205] awx.analytics.job_lifecycle job-37 finalize run
 ----
 
-+
-[source,textinfo]
-----
+. Finally explore the `aap` directory, `tree -L 1` and increment the `-L` flag to look deeper into the directory hierarchy.
 
-<<< OUTPUT ABRIDGED >>>
-               MM     MM   OOOOO    OOOOO   NN     N
-               M M   M M  O     O  O     O  N N    N
-               M  M M  M  O     O  O     O  N  N   N
-               M   M   M  O     O  O     O  N   N  N
-               M       M  O     O  O     O  N    N N
-               M       M   OOOOO    OOOOO   N     NN
-
-                     BBBBBB   U     U   GGGGG    GGGGG   Y     Y
-                     B     B  U     U  G     G  G     G   Y   Y
-                     BBBBBB   U     U  G        G          Y Y
-                     B     B  U     U  G   GGG  G   GGG     Y
-                     B     B  U     U  G     G  G     G    Y
-                     BBBBBB    UUUUU    GGGGG    GGGGG   YY
-
-<<< OUTPUT ABRIDGED >>>
-----
-
-. You can now play the Moon Buggy game, which is a text-based version of the
-popular Moon Patrol.  When you are finished, use the `q` command to quit the
-game, which will terminate the container.
-
-+
-Alternatively, you can use `podman` to kill the running container from
-*Terminal 2*.
-
-+
-[source,bash]
-----
-podman kill $(podman ps | grep -v CONTAINER | cut -f1 -d" " )
-----
+Enjoy the rest of your Red Hat One and thanks for your time today

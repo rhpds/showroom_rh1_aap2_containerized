@@ -1,22 +1,36 @@
 // :subdomain: aap2-01.sandbox5.opentlc.com
-= Getting Setup
+= Configuring the Containerized AAP2 Installer Inventory
 
 icon:clock-o[Duration: 10 Minutes] Duration: 10 minutes
 
-Now we are ready to configure our installation. In your home directory, you will find a compressed profile with the unable automation platform container installer.
+Now we are ready to configure our installation. In your home directory, you will find a compressed tar file with the Containerized AAP2 installer. Just as with the older Ansible Tower, and also the installer for Automation Controller in servers, VMs, or cloud instances the installer relies on the configuration of an Ansible inventory.
 
 Remember, currently, as discussed in Module 1, this is still a Tech Preview. The installer is available for Red Hat Enterprise Linux across 2 architectures x86 and Arm. In addition, it is available in two formats, a lightweight installer, which assumes both Internet access and a Red Hat Network login. 
 
-The other installer used here is the bundled installer which includes all its dependencies, including the container images for the major components and also for the execution environments, etc. We will explore these during the installation process.
+The other installer is the bundled installer which includes all its dependencies, including the container images for the major components and also for the execution environments, etc. We will explore these during the installation process.
 
 We have chosen to use the full bundled installer for this lab.
 
 == Unpack and Explore the Installer
 
+. Ensure you are in the home directory of the `devops` user
++
+
+[source,ini,role=execute,subs=attributes+]
+----
+cd
+----
+
 . Unpack the installer, using `tar` with the `-v` (verbose) option, so you can see the components being unpacked
 +
 
-As the tar archive unpacks you will see there are 2 major components to the bundle installer, collections and the bundle itself is largely composed of container images
+[TIP]
+====
+It is worth watching the output of the `tar` extraction as this will give you a feel for the major components, which we will briefly explore.
+====
++
+
+As the tar archive unpacks you will see there are 2 major components to the bundle installer, *collections* and the *bundle* itself is largely composed of container images of components (controller, hub, etc.), supporting infrastructure (postgres, redis), and the Execution Environments. The unbundled installer pulls these in at install time and is considerably smaller.
 +
 
 [source,ini,role=execute,subs=attributes+]

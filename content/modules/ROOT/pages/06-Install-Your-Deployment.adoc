@@ -1,12 +1,19 @@
-= Installation
+= Containerized AAP2 Installation
 
-icon:clock-o[Duration: 10 Minutes] Duration: 10 minutes
+icon:clock-o[Duration: 15 Minutes] Duration: 15-20 minutes
 
-Finally time to run the installer though the actual configuration steps in the prior 2 modules were quite light.
+Finally time to run the installer though the actual configuration steps in the prior 2 modules were quite relatively straightforward.
 
 [NOTE]
 ====
 This lab comes with 2 terminals so you can launch the installer in one terminal and keep an eye on the output whilst using the other to explore the processes and directory structures being deployed on the Containerized AAP2 host, reachable via `ssh aap2`
+
+If you are swapping back and forth between the 2 terminals remember to ensure that both terminals have the `ANSIBLE_COLLECTIONS_PATH` set correctly.
+
+[source,sh,role=execute,subs=attributes+]
+----
+export ANSIBLE_COLLECTIONS_PATH=/home/devops/ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64/collections
+----
 ====
 
 [Installation]
@@ -32,3 +39,163 @@ By default `ansible` would not be able to find the collections inside the bundle
 ----
 export ANSIBLE_COLLECTIONS_PATH=/home/devops/ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64/collections
 ----
+
+. Run the installer
+
++
+
+[source,sh,role=execute,subs=attributes+]
+----
+ansible-playbook -i inventory \
+    ansible.containerized_installer.install \
+    -e GUID={guid}
+----
++
+[NOTE]
+====
+The final argument is unique to our configuration, as mentioned in the prior module. The `-e GUID={guid}` allows us to dereference the `GUID` var we used in our config-as-code Postinstall files. 
+====
++
+
+[TIP]
+====
+Occasionally at events like conferences network issues arise, and this can be unpredictable. If you have issues running the above command and losing the connection and in turn breaking the install you can use `tmux` as a work around.
+
+. Use `tmux` to create a tmux session which you can re-attach to.
++
+
+[source,sh,role=execute,subs=attributes+]
+----
+tmux new -t aap2
+----
+
+. You can re-attach to tmux via:
++
+
+[source,sh,role=execute,subs=attributes+]
+----
+tmux attach -t aap2
+----
+Hopefully, however, this scenario will not arise.
+====
+
+== Exploring the Installation Process
+
+While the installer is running, keep an eye on it and you will see the flow of installation. Notice the `ansible.containerized_installer` collection is used for installation and can be explored from the installer directory `collections/ansible_collections/ansible`
+
+. In parallel, use the other terminal to explore the installation, ssh on to the Containerized AAP2 host
++
+
+[source,sh,role=execute,subs=attributes+]
+----
+ssh aap2
+----
+
+. As the installation proceeds explore it with the following commands:
++
+
+[source,sh,role=execute,subs=attributes+]
+----
+tree -L 4 aap
+----
++
+
+.Sample Output
+[source,texinfo]
+----
+aap
+└── containers
+    ├── podman
+    ├── storage
+    └── storage.conf
+----
++
+
+Containerized AAP2 Installer configures the above directory structure in the `ansible_user` account, in our case the `ec2-user`. In Production, it would be a good practice to create a dedicated service account for this purpose.
+
+. Explore the `podman` configuration with `podman image ls` and later in the installer process `podman ps`
++
+
+[NOTE]
+====
+Since we are running our install of Postgres you will *not* see it in the output of the above commands. Had we chosen to use the Containerized AAP2 version we would.
+====
++
+
+[source,sh,role=execute,subs=attributes+]
+----
+podman image ls
+----
++
+
+.Sample Output
+[source,texinfo]
+----
+REPOSITORY                                                                 TAG         IMAGE ID      CREATED       SIZE
+registry.redhat.io/ansible-automation-platform-24/ee-supported-rhel8       latest      052c0b03fb41  3 months ago  1.72 GB
+registry.redhat.io/ansible-automation-platform-24/hub-web-rhel8            latest      d5ddd9019110  3 months ago  455 MB
+registry.redhat.io/ansible-automation-platform-24/eda-controller-rhel8     latest      1c2257d47137  3 months ago  728 MB
+registry.redhat.io/ansible-automation-platform-24/hub-rhel8                latest      54388ad50c3e  3 months ago  700 MB
+registry.redhat.io/ansible-automation-platform-24/controller-rhel8         latest      4a08ce099a01  3 months ago  758 MB
+registry.redhat.io/ansible-automation-platform-24/eda-controller-ui-rhel8  latest      32ace9501637  3 months ago  561 MB
+registry.redhat.io/rhel8/redis-6                                           latest      84a6721d2a6f  4 months ago  301 MB
+----
+
+. As the installation progresses the various containers run by `podman` as `systemd` services will come to life.
++
+
+[source,sh,role=execute,subs=attributes+]
+----
+podman ps
+----
++
+
+.Sample Output (late in the installation with all containers running)
+[source,texinfo]
+----
+CONTAINER ID  IMAGE                                                                             COMMAND               CREATED         STATUS             PORTS       NAMES
+558d20985b0e  registry.redhat.io/rhel8/redis-6:latest                                           run-redis             51 minutes ago  Up 51 minutes ago              redis
+ce1b3f5b1af3  registry.redhat.io/ansible-automation-platform-24/ee-supported-rhel8:latest       /usr/bin/receptor...  50 minutes ago  Up 43 minutes ago              receptor
+e8174b595959  registry.redhat.io/ansible-automation-platform-24/controller-rhel8:latest         /usr/bin/launch_a...  49 minutes ago  Up 43 minutes ago              automation-controller-rsyslog
+9527103dc199  registry.redhat.io/ansible-automation-platform-24/controller-rhel8:latest         /usr/bin/launch_a...  48 minutes ago  Up 43 minutes ago              automation-controller-task
+67550c656f89  registry.redhat.io/ansible-automation-platform-24/controller-rhel8:latest         /usr/bin/launch_a...  48 minutes ago  Up 43 minutes ago              automation-controller-web
+cdf5c870108b  registry.redhat.io/ansible-automation-platform-24/eda-controller-rhel8:latest     gunicorn --bind 1...  21 minutes ago  Up 20 minutes ago              automation-eda-api
+ad4658314bf5  registry.redhat.io/ansible-automation-platform-24/eda-controller-rhel8:latest     daphne -b 127.0.0...  21 minutes ago  Up 20 minutes ago              automation-eda-daphne
+4cb9d1393bc4  registry.redhat.io/ansible-automation-platform-24/eda-controller-ui-rhel8:latest  /bin/sh -c nginx ...  21 minutes ago  Up 20 minutes ago              automation-eda-web
+1bf7818b5c01  registry.redhat.io/ansible-automation-platform-24/eda-controller-rhel8:latest     aap-eda-manage rq...  21 minutes ago  Up 20 minutes ago              automation-eda-worker-1
+4fe655d086bf  registry.redhat.io/ansible-automation-platform-24/eda-controller-rhel8:latest     aap-eda-manage rq...  21 minutes ago  Up 20 minutes ago              automation-eda-worker-2
+e581c53b554c  registry.redhat.io/ansible-automation-platform-24/hub-rhel8:latest                pulp-api              20 minutes ago  Up 18 minutes ago              automation-hub-api
+fa165ebe3672  registry.redhat.io/ansible-automation-platform-24/hub-rhel8:latest                pulp-content          19 minutes ago  Up 17 minutes ago              automation-hub-content
+018b41b8c61c  registry.redhat.io/ansible-automation-platform-24/hub-web-rhel8:latest            nginx -g daemon o...  19 minutes ago  Up 17 minutes ago              automation-hub-web
+68aefbf7b4c6  registry.redhat.io/ansible-automation-platform-24/hub-rhel8:latest                pulp-worker           19 minutes ago  Up 17 minutes ago              automation-hub-worker-1
+40234e5517c4  registry.redhat.io/ansible-automation-platform-24/hub-rhel8:latest                pulp-worker           19 minutes ago  Up 17 minutes ago              automation-hub-worker-2
+----
+
+== Explore your Installation
+
+
+[WARNING]
+====
+The current Tech Preview does *not* have inbuilt support for TLS, the following end-points whilst accessible will generate a Browser Warning. Until full support is added one possible workaround would be to terminate TLS on a reverse proxy such as traefik.
+====
+
+[cols="2,3,2,2"]
+|===
+|Service |URL |Login |Password
+
+| Automation Controller
+|`http://aap2.{subdomain}:80`
+| `admin`
+| `r3dh4t1!`
+
+| Automation Hub
+|`http://aap2.{subdomain}:81`
+| `admin`
+| `r3dh4t1!`
+
+| Automation EDA
+|`http://aap2.{subdomain}:82`
+| `admin`
+| `r3dh4t1!`
+
+|===

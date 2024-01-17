@@ -1,6 +1,6 @@
 = Postinstall Capability
 
-icon:clock-o[Duration: 10 Minutes] Duration: 10 minutes
+icon:clock-o[Duration: 10 Minutes] Duration: 20 minutes
 
 A new feature in the TechPreview Installer is the link:https://access.redhat.com/documentation/en-us/red_hat_ansible_automation_platform/2.4/html-single/containerized_ansible_automation_platform_installation_guide/index#using-postinstall_aap-containerized-installation[Postinstall] capability
 
@@ -8,18 +8,32 @@ This enables your AAP2 infrastructure to come up both with its manifest already 
 
 * Organizations
 * Inventories
+* Groups
+* Hosts
+* Credentials
 * Projects
 * Job Templates 
 
 Or any other resource capable of being installed by the powerful `infra.controller_configuration` link:https://galaxy.ansible.com/ui/repo/published/infra/controller_configuration/[collection] fully documented link:https://galaxy.ansible.com/ui/repo/published/infra/controller_configuration/docs/[here]. 
 
-You can view all the collections contained within the bundled installer with the `ansible-galaxy` command. You should have set the `ANSIBLE_COLLECTIONS_PATH` already earlier in the lab but for completeness included below.
+You can view all the collections contained within the bundled installer with the `ansible-galaxy` command. You should have set the `ANSIBLE_COLLECTIONS_PATH` already earlier in the lab but for completeness, we include it below.
+
+. Ensure the `ANSIBLE_COLLECTIONS_PATH` env var is set
++
 
 [source,sh,role=execute,subs=attributes+]
 ----
 export ANSIBLE_COLLECTIONS_PATH=/home/devops/ansible-automation-platform-containerized-setup-bundle-2.4-1-x86_64/collections
+----
+
+. Validate the ANSIBLE_COLLECTIONS_PATH is correctly set via `ansible-galaxy list`
++
+
+[source,sh,role=execute,subs=attributes+]
+----
 ansible-galaxy collection list
 ----
++
 
 .Sample Output
 [source,texinfo]
@@ -36,9 +50,11 @@ infra.controller_configuration   2.5.1
 ----
 
 [configure]
-== Create a Simple Postinstall Example
+== Create a Complete Postinstall Example
 
-In this section, we will create a very simple scenario simply creating some Organizations and a Project. After the installation is complete we will go further and do manual creation of a job_template just to get hands-on with the Contaierized AAP2 Console which is identical to other deployment platforms (Red Hat Enterprise Linux, OpenShift, or a Cloud Based AAP2 such as provided by Azure and AWS). 
+In this section, we will create a complete application deployment scenario creating all the resources up to and including a `job_template`.  After the installation is complete we will and manually run the `job_template` to both work hands-on with the Containerized AAP2 Console and that the Postinstall feature works as expected in creating resources.
+
+You will see the Controller Console is identical to other AAP2 deployment platforms (Red Hat Enterprise Linux, OpenShift, or a Cloud Based AAP2 such as provided by Azure and AWS). 
 
 . Recall that in the prior lab whilst configuring the inventory you edited this section:
 +
@@ -61,7 +77,7 @@ controller_postinstall_dir=/home/devops/config-as-code
 
 [source,sh,role=execute,subs=attributes+]
 ----
-ls ~/manifest.zip
+ls /home/devops/manifest.zip
 ----
 +
 
@@ -76,8 +92,7 @@ ls ~/manifest.zip
 
 [source,sh,role=execute,subs=attributes+]
 ----
-cd
-mkdir config-as-code
+cd; mkdir config-as-code
 ----
 
 . Add a `controller` sub-directory for a good structure and `cd` into it
@@ -95,34 +110,164 @@ mkdir config-as-code/controller
 cd config-as-code/controller
 ----
 
-. Create a new file `organizations.yml` and enter the following YAML list
+. Create a new file `credentials.yml` and enter the following YAML list
 +
 
 [TIP]
 ====
-If you want to add further AAP2 Resources (Inventories, Projects etc) you can refer to the document linked earlier. For example here is the documentation for link:https://galaxy.ansible.com/ui/repo/published/infra/controller_configuration/content/role/organizations/[organizations]
+If you want to add further AAP2 Resources (Inventories, Projects etc) you can refer to the document link:https://galaxy.ansible.com/ui/repo/published/infra/controller_configuration/content/role/organizations/[linked earlier]
+
+Your file names, e.g. `credentials.yml` etc should match the names of the roles in the collections with the postfix `.yml`
+   
 ====
++
+image::controller_configuration.png[Lab Topology,align="center",width="100%"]
 +
 
 [source,sh,role=execute,subs=attributes+]
 ----
+---
+controller_credentials:
+
+  - name: rh1-demo-credential
+    credential_type: Machine
+    organization: Default
+    inputs:
+      username: ec2-user
+      ssh_key_data: "{{ lookup('file', '/home/devops/.ssh/' + GUID + 'key.pem') }}"
+----
++
+[NOTE]
+====
+In the final line we directly reference a variable `GUID` which is both part of the FQDN of our hosts and also the name of our SSH key (`<GUID>key.pem`). Since our installer has no visibility of the var `GUID` we will have to pass it to the installer at tun time ie via `-e GUID={guid}`.
+
+Alternatively we could hard code it bit the above approach is superior and allows easy re-use of a `config-as-code` repo.
+====
+
+. Create a new file `organizations.yml` and enter the following YAML list
++
+
+[source,sh,role=execute,subs=attributes+]
+---- 
 controller_organizations:
 
   - name: Default
     description: "Default organization for resources"
 
-  - name: Engineering
-    description: "Engineering Organization"
+  - name: Devops
+    description: "DevOps and Automation Team"
+----
 
-  - name: Sales
-    description: "Sales Organization"
+. Create a new file `inventories.yml` and enter the following YAML list
++
 
-  - name: Marketing
-    description: "Marketing Organization"
+[source,sh,role=execute,subs=attributes+]
+----
+---
+controller_inventories:
+
+  - name: rh1-demo-inventory
+    organization: Default
+    description: Red Hat One Demo App
+----
+
+. Create a new file `hosts.yml` and enter the following YAML list
++
+
+[source,sh,role=execute,subs=attributes+]
+----
+---
+controller_hosts:
+
+  - name: "app-frontend.{{ GUID }}.internal"
+    inventory: rh1-demo-inventory
+    enabled: true
+
+  - name: "app-backend.{{ GUID }}.internal"
+    inventory: rh1-demo-inventory
+    enabled: true
+----
+
+. Create a new file `groups.yml` and enter the following YAML list
++
+
+[source,sh,role=execute,subs=attributes+]
+----
+---
+controller_groups:
+
+  - name: app_frontends
+    description: App frontend
+    inventory: rh1-demo-inventory
+    hosts:
+      - "app-frontend.{{ GUID }}.internal"
+
+  - name: app_backends
+    description: App backend
+    inventory: rh1-demo-inventory
+    hosts:
+      - "app-backend.{{ GUID }}.internal"
+----
+
+. Create a new file `projects.yml` and enter the following YAML list
++
+
+[source,sh,role=execute,subs=attributes+]
+----
+---
+controller_projects:
+
+  - name: rh1-demo-project
+    organization: Default
+    scm_branch: main
+    scm_clean: 'no'
+    scm_delete_on_update: 'no'
+    scm_type: git
+    scm_update_on_launch: 'no'
+    scm_url: https://github.com/rhpds/multi-tier-app-deployer.git
+----
+
+
+. Finally, create a new file `job_templates.yml` and enter the following YAML list
++
+
+[source,sh,role=execute,subs=attributes+]
+----
+---
+controller_templates:
+
+  - name: rh1-demo-job-template
+    job_type: run
+    inventory: rh1-demo-inventory
+    project: rh1-demo-project
+    playbook: deploy-app.yml
+    credentials:
+      - rh1-demo-credential
+----
+
+. Check you have the *7* configuration files
++
+
+[source,sh,role=execute,subs=attributes+]
+----
+ls -1
+----
++
+
+.Sample Output
+[source,texinfo]
+----
+credentials.yml
+groups.yml
+hosts.yml
+inventories.yml
+job_templates.yml
+organizations.yml
+projects.yml
 ----
 
 == Summary
 
-In this, short, module we added the necessary files and directories to test out the new Postinstall feature available in the TechPreview AAP2 Installer.
+In this module, we added the necessary files and directories to test out the new Postinstall feature available in the TechPreview AAP2 Installer.
 
-In the next module, we will run the Installer and start to explore the new infrastructure.
+In the next module, we will run the Installer and explore the new infrastructure.
