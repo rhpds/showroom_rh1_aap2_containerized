@@ -106,6 +106,8 @@ The terminals to your right are logged in via `ssh` to the bastion as the `devop
 
 NOTE: All instances are running RHEL 9.3 and are sized appropriately for the lab.
 
+== Containerized AAP2 Services and Ports
+
 [#resources]
 == Resources and Credentials 
 
