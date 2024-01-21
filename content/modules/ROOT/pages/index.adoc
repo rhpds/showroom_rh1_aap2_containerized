@@ -1,5 +1,15 @@
-= Overview and Goals
+== The Lab Modules
 
+. link:01-Introduction.html[Introduction]
+. link:02-Getting-Setup.html[Getting Setup] - a quick tour of your environment and basic tool installation
+. link:03-AAP2-Backend-Setup.html[Setting up a Postgres Database for AAP2] - installing a standalone Postgres Database
+. link:04-AAP2-Installer-Inventory.html[Configuring the AAP2 Installer Inventory]
+. link:05-Post-Install-Feature.html[Configuring the Postinstall feature]
+. link:06-Install-Your-Deployment.html[Install AAP2] - run the installer and explore the process
+. link:07-Explore-Your-Deployment.html[Explore your deployment]
+. link:Resources-and-Credentials.html[Resources and Credentials]
+
+////
 icon:clock-o[Duration: 10 Minutes] Duration: 10 minutes
 
 In this, opening, module, we will explore the lab goals, our environment and introduce the Ansible Automation Containerized Platform and get ready to install the Containerized version of Red Hat Ansible Automation Platform 2, typically referred to as AAP2 from now on for brevity.
@@ -77,19 +87,12 @@ image::topology.png[Lab Topology,align="center",width="100%"]
 |===
 
 
-////
 * `bastion` - the terminals to your right are connected to this host via ssh as the `devops` user.
 ** This host is where you will be primarily working from.
 * The AAP2 Hosts
 ** `aap2`
 
 NOTE: All instances are running RHEL 9.3 and are sized appropriately for the lab.
-
-////
-
-
-
-////
 
 [#resources]
 == Resources and Credentials 
@@ -100,3 +103,5 @@ link:Resources-and-Credentials.html[Credentials and Resources]
 NOTE: The URLs for the AAP2 Infrastructure itself will, obviously, not respond until after you have successfully installed the AAP2 Infrastructure. 
 
 You will need to use the IP address of the AAP2 Infrastructure host in the URLs below.  The IP address of the AAP2 Infrastructure host is provided in the lab environment details page.
+
+////

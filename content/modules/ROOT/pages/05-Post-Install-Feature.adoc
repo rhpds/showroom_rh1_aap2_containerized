@@ -139,7 +139,7 @@ controller_credentials:
 +
 [NOTE]
 ====
-In the final line, we directly reference a variable `GUID` which is both part of the FQDN of our hosts and also the name of our SSH key (`<GUID>key.pem`). Since our installer has no visibility of the var `GUID` we will have to pass it to the installer at tun time ie via `-e GUID={guid}`.
+In the final line, we directly reference a variable `GUID` which is both part of the FQDN of our hosts and also the name of our SSH key (`<GUID>key.pem`). Since our installer has no visibility of the var `GUID` we will have to pass it to the installer at run time ie via `-e GUID={guid}`.
 
 Alternatively, we could hard code it but the above approach is superior and allows easy re-use of a `config-as-code` repo.
 ====

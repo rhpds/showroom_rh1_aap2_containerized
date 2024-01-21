@@ -5,7 +5,7 @@ icon:clock-o[Duration: 10 Minutes] Duration: 10 minutes
 
 In this module, we will install our own Postgres backend for Containerized AAP2 *without* using our bundled installer.
 
-== Why
+== Why install our own Postgres?
 
 Given that the installer for Containerized AAP2 supports creating and running a Containerized version of Postgres why are we installing our own? The Containerized AAP2 installer supports a very flexible mix of architectural choices including:
 
@@ -30,7 +30,7 @@ The Two Tier architecture also provides several advantages:
 
 [NOTE]
 ====
-The Red Hat Demo Team who deployed this lab makes use of both optimized instances and cloud-based DBaaS. The infrastructure for your lab today used AWS RDS as the database backend for AAP2.
+The Red Hat Demo Team who deployed this lab makes use of both optimized instances (IO Optimized via NVMe drivers for example to sustain higher I/O ops) and cloud-based DBaaS. The infrastructure for your lab today used AWS RDS as the database backend for AAP2.
 ====
 
 ////

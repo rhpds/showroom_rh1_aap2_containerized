@@ -1,9 +1,8 @@
-
 * xref:01-Introduction.adoc[1. Introduction]
 
 * xref:02-Getting-Setup.adoc[2. Getting Setup]
-** xref:02-Getting-Setup.adoc#topology[Lab Topology]
-** xref:02-Getting-Setup.adoc#modules[Resources and Credentials]
+// ** xref:02-Getting-Setup.adoc#topology[Lab Topology]
+// ** xref:02-Getting-Setup.adoc#modules[Resources and Credentials]
 
 * xref:03-AAP2-Backend-Setup.adoc[3. Creating a Standalone AAP2 Postgres Backend]
 // ** xref:02-AAP2-Backend-Setup.adoc#repositories[Repositories]
@@ -17,7 +16,7 @@
 * xref:06-Install-Your-Deployment.adoc[6. Install Ansible Automation Platfrom 2]
 
 * xref:07-Explore-Your-Deployment.adoc[7. Explore your Installation]
-** xref:07-Explore-Your-Deployment.adoc#jobrun[Run the `job_template`]
+// ** xref:07-Explore-Your-Deployment.adoc#jobrun[Run the `job_template`]
 
 // * xref:07-Placeholder.adoc
 
