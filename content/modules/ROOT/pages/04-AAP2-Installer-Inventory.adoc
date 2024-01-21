@@ -1,15 +1,13 @@
 // :subdomain: aap2-01.sandbox5.opentlc.com
 = Configuring the Containerized AAP2 Installer Inventory
 
-icon:clock-o[Duration: 10 Minutes] Duration: 10 minutes
+icon:clock-o[Duration: 15 Minutes] Duration: 15 minutes
 
-Now we are ready to configure our installation. In your home directory, you will find a compressed tar file with the Containerized AAP2 installer. Just as with the older Ansible Tower, and also the installer for Automation Controller in servers, VMs, or cloud instances the installer relies on the configuration of an Ansible inventory.
+Now we are ready to configure our installation. In your home directory, you will find a compressed tar file with the Containerized AAP2 installer. Just as with the older Ansible Tower, and also the installer for Automation Controller for servers, VMs, or cloud instances the installer relies on the configuration of an Ansible inventory.
 
-Remember, currently, as discussed in Module 1, this is still a Tech Preview. The installer is available for Red Hat Enterprise Linux across 2 architectures x86 and Arm. In addition, it is available in two formats, a lightweight installer, which assumes both Internet access and a Red Hat Network login. 
+Remember, currently, as discussed in Module 1, this is still a Technical Preview. The installer is available for Red Hat Enterprise Linux across 2 architectures x86 and Arm. In addition, it is available in two formats, a lightweight installer, which assumes both Internet access and a Red Hat Network login and the bundled installer. 
 
-The other installer is the bundled installer which includes all its dependencies, including the container images for the major components and also for the execution environments, etc. We will explore these during the installation process.
-
-We have chosen to use the full bundled installer for this lab.
+We will use the bundled installer which includes all its dependencies, including the container images for the major components and also for the execution environments, etc. We will explore these during the installation process.
 
 == Unpack and Explore the Installer
 
@@ -192,8 +190,8 @@ aap2
 # Uncomment the lines below and amend appropriately if you want AAP to install and manage the postgres databases
 # Leave commented out if you intend to use your own external database and just set appropriate _pg_hosts vars
 # see mandatory sections under each AAP component
-[database]
-aap2-database
+#[database]
+#aap2-database
 
 [all:vars]
 
@@ -235,7 +233,6 @@ bundle_dir=/home/devops/ansible-automation-platform-containerized-setup-bundle-2
 ====
 In the field, if you are not copying from a lab don't forget that the `bundle_dir` is not just the installer directory but also needs the `/bundle` at the end of the `bundle_dir` path.
 ====
-
 
 . Configure the Common Variables - Controller
 +
@@ -315,3 +312,6 @@ aap2 | SUCCESS => {
 }
 ----
 
+== Summary
+
+Hopefully, you will agree that the configuration of the `inventory` is quite straightforward. Also, it should be apparent how you could configure all sorts of different scenarios via the inventory groups ranging from an "all in one" install on a single node to a completely distributed 1 service per node type install.

@@ -1,6 +1,6 @@
 = Containerized AAP2 Installation
 
-icon:clock-o[Duration: 15 Minutes] Duration: 15-20 minutes
+icon:clock-o[Duration: 15 Minutes] Duration: 15 minutes
 
 Finally time to run the installer though the actual configuration steps in the prior 2 modules were quite relatively straightforward.
 
@@ -59,7 +59,7 @@ The final argument is unique to our configuration, as mentioned in the prior mod
 
 [TIP]
 ====
-Occasionally at events like conferences network issues arise, and this can be unpredictable. If you have issues running the above command and losing the connection and in turn breaking the install you can use `tmux` as a work around.
+Occasionally at events like conferences network issues arise, and this can be unpredictable. If you have issues running the above command and losing the connection and in turn breaking the install you can use `tmux` as a workaround.
 
 . Use `tmux` to create a tmux session which you can re-attach to.
 +
@@ -83,7 +83,7 @@ Hopefully, however, this scenario will not arise.
 
 While the installer is running, keep an eye on it and you will see the flow of installation. Notice the `ansible.containerized_installer` collection is used for installation and can be explored from the installer directory `collections/ansible_collections/ansible`
 
-. In parallel, use the other terminal to explore the installation, ssh on to the Containerized AAP2 host
+. In parallel, use the other terminal to explore the installation, ssh onto the Containerized AAP2 host
 +
 
 [source,sh,role=execute,subs=attributes+]
@@ -171,8 +171,11 @@ fa165ebe3672  registry.redhat.io/ansible-automation-platform-24/hub-rhel8:latest
 40234e5517c4  registry.redhat.io/ansible-automation-platform-24/hub-rhel8:latest                pulp-worker           19 minutes ago  Up 17 minutes ago              automation-hub-worker-2
 ----
 
-== Explore your Installation
+== Summary
 
+We have now, hopefully, successfully run the deployer and installed Containerized AAP2 and connected it to the Postgres instance we installed earlier in Module 3.
+
+The next module will guide us through an exploration of running a `job_template` on our new installation but feel free to explore the components:
 
 [WARNING]
 ====

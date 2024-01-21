@@ -3,6 +3,8 @@
 
 icon:clock-o[Duration: 10 Minutes] Duration: 10 minutes
 
+In this module, we will install our own Postgres backend for Containerized AAP2 *without* using our bundled installer.
+
 == Why
 
 Given that the installer for Containerized AAP2 supports creating and running a Containerized version of Postgres why are we installing our own? The Containerized AAP2 installer supports a very flexible mix of architectural choices including:
@@ -14,18 +16,27 @@ Given that the installer for Containerized AAP2 supports creating and running a 
 
 [NOTE]
 ====
-Not all components need to be installed, for example, if you don't need Hub or EDA, you can omit their configuration/installation.
+Not all components need to be installed, for example, if you don't need Hub or EDA, you can omit their configuration/installation. IE by commenting out the relevant parts of the installer inventory.
 ====
 
-In this lab, we will install our version of Postgres to show how the Containerized AAP2 Installer supports this and allows Controller etc to make use of a pre-existing instance of Postgres. This is useful in many scenarios eg customer has a dedicated Postgres team or uses Cloud-Based DBaaS (Database as a Service) with a Postgres flavor (in our case this must be Postgres 13 currently).
+In this module, we will install our version of Postgres to show how the Containerized AAP2 Installer supports this and allows Controller etc to make use of a pre-existing instance of Postgres. This is useful in many scenarios eg customer has a dedicated Postgres team or uses Cloud-Based DBaaS (Database as a Service) with a Postgres flavor (in our case this must be Postgres 13 currently).
 
 The Two Tier architecture also provides several advantages:
 
 * Clear separation of concerns
-* Eliminate I/O issues around Container Volumes
+* Avoid potential I/O issues around Container Volumes
 * Allow for the use of I/O optimized Servers and/or Cloud Instances
 
+
+[NOTE]
+====
+The Red Hat Demo Team who deployed this lab makes use of both optimized instances and cloud-based DBaaS. The infrastructure for your lab today used AWS RDS as the database backend for AAP2.
+====
+
 ////
+
+TODO: Should I remove all this or are there peices of content worth re-using
+
 for example a complete all in one where everything including post runs on a single host to a completely distributed model, where each component runs on its own BM.
 
 In addition, the installer allows the end-user to supply their own grass instance. This is a flexible option and allows for not only a separation of concerns, but for automation teams to leverage centrally, managed databases by dedicated database teams, but also the optioiNOTEn of using a cloud based DBA, such as RDS.
@@ -43,7 +54,7 @@ NOTE: It is beyond the scope of this lab to cover the support implications of ex
 
 == How
 
-This lab preplaces a simple Postgres installer already configured to work in our environment. It simply leverages the following role and collection
+This lab provides a simple Postgres installer already configured to work in our environment. It simply leverages the following role and collection
 
 * `geerlingguy.postgresql`
 * `community.postgresql`
@@ -78,9 +89,13 @@ tree -L 2
 ----
 +
 
-. If you like take a moment to explore the repository which is quite simple, perhaps the most interesting file being the `group_vars/aap2_databases.yml` primarily used for configuring the `geerlingguy.postgresql` role.
+. If you like take a moment to explore the repository which is quite simple a little deeper, perhaps the most interesting file being the `group_vars/aap2_databases.yml` primarily used for configuring the `geerlingguy.postgresql` role.
 +
-NOTE: It is the var file where we set the Postgres password which will be used later by the AAP2 installer. For simplicity, we recommend you do not change it in this lab situation.
+
+[NOTE]
+====
+It is the var file where we set the Postgres password which will be used later by the AAP2 installer. For simplicity, we recommend you do not change it in this lab situation.
+====
 
 . Next let's install the necessary dependencies (role and collection) which have been isolated and versioned in the `requirements.yml` file, via `ansible-galaxy`
 +

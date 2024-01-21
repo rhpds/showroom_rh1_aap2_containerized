@@ -1,8 +1,9 @@
-= Using Containerized AAP2
+= Explore and Use Containerized AAP2
 
-Whilst we have lightly touched on the new Postinstall capability built on top of the foo collection in this Bonus lab we will actually setup a simple AAP2 job_template and assocaited resources. We will do this manually as it allows us to experiewnce the Containerized AAP2 UI (User Interface) and realize that it is identical to the Ansible Automation Controller UI from an instance/VM based install and indeed an OpenShift install.
+We touched on the new Postinstall capability built on top of the `infra.controller_configuration` collection, in this Bonus final we will actually use the simple AAP2 job_template and associated resources. 
 
-== Run the 
+== Run the `job_template`
+
 . Log in to your Controller Console as user: `admin` password: `r3dh4t1!`
 +
 
@@ -49,17 +50,6 @@ image::job_template.png[Lab Topology,align="center",width="100%"]
 [source,sh,role=execute,subs=attributes+]
 ----
 curl app-frontend:8000/api/resources | jq
-+
-[source,sh]
-----
-
-----
-+
-.Sample Output
-[source,texinfo]
-----
-
-----
 ----
 +
 
@@ -84,9 +74,10 @@ curl app-frontend:8000/api/resources | jq
 
 == Summary and Bonus Activities
 
-Congratulations you have now completed the lab *but* should you have time to spare then areas to explore include:
+Congratulations you have now completed the lab *but* should you have time to spare then an area to explore would be the actual running container on the `aap2` host giving a foundational overview of how they run and how you can explore their logs etc.
 
 . `ssh` to the `aap2` host
++
 
 [source,sh,role=execute,subs=attributes+]
 ----
@@ -134,7 +125,7 @@ SUB    = The low-level unit activation state, values depend on unit type.
 
 [source,sh,role=execute,subs=attributes+]
 ----
-systemctl list-units --type=service --state=running --user
+podman ps
 ----
 +
 
@@ -189,4 +180,10 @@ podman logs automation-controller-task
 
 . Finally explore the `aap` directory, `tree -L 1` and increment the `-L` flag to look deeper into the directory hierarchy.
 
-Enjoy the rest of your Red Hat One and thanks for your time today
+== Conclusion
+
+Hopefully, you have gained insight into how to both install and configure, Containerized Ansible Automation Platform 2.
+
+As a final reminder remember that this is currently in TechPreview and subject to change. When it is released it will broaden the deployment choices for AAP2 and combine the advantages of Containerized Deployments with a simple yet versatile installation process.
+
+Enjoy the rest of your Red Hat One and thank you for your time today.

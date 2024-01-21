@@ -29,7 +29,7 @@ tree -L 1
 . The Containerized AAP2 Installer - bundled version
 . A sample `inventory` for the entire lab infrastructure
 . An AAP2 Manifest - injected in Module 6
-. A simple Postres installer repositary
+. A simple Postres installer repository
 . A sample solution repo for reference
 
 == Initial Configuration
@@ -149,9 +149,16 @@ Installed:
 
 Complete!
 ----
-+
+
+== Sumaary
+
+In this section, we simply set up our `bastion` host with the necessary tooling before installation. In addition, there was the option to tune the toolchain to reflect personal preferences.
 
 ////
+
+TODO: Safe to delete the remainder?
+
+
 We will start by installing the `community.postgresql` collection. This collection will be used to install the PostgreSQL database server.
 
 +

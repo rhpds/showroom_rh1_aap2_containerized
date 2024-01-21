@@ -2,11 +2,11 @@
 
 icon:clock-o[Duration: 10 Minutes] Duration: 10 minutes
 
-Welcome
+Welcome to the Red Hat One Containerized Ansible Automation Platform 2 lab where we will explore the installation options of this Technical Preview (TechPreview) Product and work our way through 1 scenario whilst in parallel explore what is going on under the covers with the installation gaining insight into how it actual deploys and functions.
+
 // TODO: Add intro 
 
 == Overview and Goals
-
 
 In this, opening, module, we will explore the lab goals, our environment and introduce the Containerized Ansible Automation Platform and get ready to install the Containerized version of Red Hat Ansible Automation Platform 2, typically referred to as AAP2 from now on for brevity.
 
@@ -29,7 +29,7 @@ In this, opening, module, we will explore the lab goals, our environment and int
 
 The Containerized Ansible Automation Platform and its Installer are *currently* in Tech Preview, which Red Hat defines link:https://access.redhat.com/support/offerings/techpreview[here].
 
-[quote,Opening paragraph of Red Hat's Tech Preview Technology Preview Features - Scope of Support]
+[quote, Opening paragraph of Red Hat's Tech Preview Technology Preview Features - Scope of Support]
 ____
 _Technology Preview features provide early access to upcoming product innovations, enabling you to test functionality and provide feedback during the development process. However, these features are not fully supported under Red Hat Subscription Level Agreements, may not be functionally complete, and are not intended for production use. As Red Hat considers making future iterations of Technology Preview features generally available, we will attempt to resolve any issues that customers experience when using these features._
 ____
@@ -66,7 +66,8 @@ Containerized AAP2 requires Red Hat Enterprise Linux 9.2 or later.
 [#topology]
 == Lab Topology
 
-The lab topology is quite simple
+Our lab topology is quite simple and can be divided logically into 3 components: `bastion` the machine you will primarily work from, The Containerized AAP2 infrastructure itself allowing for a 2-Tier deployment with a separate Postgres instance, and finally a pair of target hosts to deploy a simple application to as part of the lab. 
+
 // TODO: Update diagram
 
 image::topology.png[Lab Topology,align="center",width="100%"]
@@ -106,9 +107,12 @@ The terminals to your right are logged in via `ssh` to the bastion as the `devop
 
 NOTE: All instances are running RHEL 9.3 and are sized appropriately for the lab.
 
+////
 == Containerized AAP2 Services and Ports
+
+////
 
 [#resources]
 == Resources and Credentials 
 
-At any point in the labs, you can find the Resources and Credentials are all gathered in the this document, at the bottom of the navigation menu top left link:Resources-and-Credentials.html[Resources].
+At any point in the labs, you can find the Resources and Credentials are all gathered in this document, at the bottom of the navigation menu top left link:Resources-and-Credentials.html[Resource, Credentials, and Consoles].
