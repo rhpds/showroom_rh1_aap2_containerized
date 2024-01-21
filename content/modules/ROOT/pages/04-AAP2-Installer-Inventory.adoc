@@ -191,7 +191,7 @@ aap2
 # Leave commented out if you intend to use your own external database and just set appropriate _pg_hosts vars
 # see mandatory sections under each AAP component
 #[database]
-#aap2-database
+#fqdn_of_your_rhel_host ansible_connection=local
 
 [all:vars]
 
@@ -253,7 +253,7 @@ controller_pg_password=r3dh4t1!
 # To use the postinstall feature you need to set these variables
 controller_postinstall=true
 controller_license_file=/home/devops/manifest.zip
-controller_postinstall_dir=/home/devops/aap2-config-as-code 
+controller_postinstall_dir=/home/devops/config-as-code 
 ----
 
 . Configure the Common Variables - Automation Hub
