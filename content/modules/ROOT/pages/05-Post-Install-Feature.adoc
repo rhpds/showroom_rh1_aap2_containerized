@@ -16,7 +16,7 @@ This enables your AAP2 infrastructure to come up both with its manifest already 
 
 Or any other resource capable of being installed by the powerful `infra.controller_configuration` link:https://galaxy.ansible.com/ui/repo/published/infra/controller_configuration/[collection] fully documented link:https://galaxy.ansible.com/ui/repo/published/infra/controller_configuration/docs/[here]. 
 
-You can view all the collections contained within the bundled installer with the `ansible-galaxy` command. You should have set the `ANSIBLE_COLLECTIONS_PATH` already earlier in the lab but for completeness, we include it below.
+You can view all the collections contained within the bundled installer with the `ansible-galaxy` command. 
 
 . Ensure the `ANSIBLE_COLLECTIONS_PATH` env var is set
 +
@@ -52,11 +52,11 @@ infra.controller_configuration   2.5.1
 [configure]
 == Create a Complete Postinstall Example
 
-In this section, we will create a complete application deployment scenario creating all the resources up to and including a `job_template`.  After the installation is complete we will and manually run the `job_template` to both work hands-on with the Containerized AAP2 Console and that the Postinstall feature works as expected in creating resources.
+In this section, we will create a complete application deployment scenario creating all the resources up to and including a `job_template`.  After the installation is complete we will manually run the `job_template` to both work hands-on with the Containerized AAP2 Console and to check that the Postinstall feature works as expected in creating resources.
 
 You will see the Controller Console is identical to other AAP2 deployment platforms (Red Hat Enterprise Linux, OpenShift, or a Cloud-Based AAP2 such as provided by Azure and AWS). 
 
-. Recall that in the prior lab whilst configuring the inventory you edited this section:
+. Recall that in the prior module whilst configuring the inventory you edited this section:
 +
 
 As long as it matches the below no further edits should be necessary

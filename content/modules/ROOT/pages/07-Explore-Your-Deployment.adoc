@@ -31,7 +31,7 @@ As mentioned earlier the installer has *not* installed valid certificates so you
 
 image::controller_dashboard.png[Lab Topology,align="center",width="100%"]
 
-. Now navigate the the *Templates* screen and open the *rh1-demo-job-template*
+. Now navigate the *Templates* screen and open the *rh1-demo-job-template*
 +
 
 image::controller_templates.png[Lab Topology,align="center",width="100%"]

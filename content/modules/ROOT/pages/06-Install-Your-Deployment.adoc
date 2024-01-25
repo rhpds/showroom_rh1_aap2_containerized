@@ -2,11 +2,11 @@
 
 icon:clock-o[Duration: 15 Minutes] Duration: 15 minutes
 
-Finally time to run the installer though the actual configuration steps in the prior 2 modules were quite relatively straightforward.
+Finally time to run the installer though the actual configuration steps in the prior two modules were quite relatively straightforward.
 
 [NOTE]
 ====
-This lab comes with 2 terminals so you can launch the installer in one terminal and keep an eye on the output whilst using the other to explore the processes and directory structures being deployed on the Containerized AAP2 host, reachable via `ssh aap2`
+This lab comes with two terminals so you can launch the installer in one terminal and keep an eye on the output whilst using the other to explore the processes and directory structures being deployed on the Containerized AAP2 host, reachable via `ssh aap2`
 
 If you are swapping back and forth between the 2 terminals remember to ensure that both terminals have the `ANSIBLE_COLLECTIONS_PATH` set correctly.
 
