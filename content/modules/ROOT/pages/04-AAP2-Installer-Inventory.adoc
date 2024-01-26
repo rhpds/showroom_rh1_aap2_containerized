@@ -5,7 +5,7 @@ icon:clock-o[Duration: 15 Minutes] Duration: 15 minutes
 
 Now we are ready to configure our installation. In your home directory, you will find a compressed tar file with the Containerized AAP2 installer. Just as with the older Ansible Tower, and also the installer for Automation Controller for servers, VMs, or cloud instances the installer relies on the configuration of an Ansible inventory.
 
-Remember, currently, as discussed in Module 1, this is still a Technical Preview. The installer is available for Red Hat Enterprise Linux across 2 architectures x86 and Arm. In addition, it is available in two formats, a lightweight installer, which assumes both Internet access and a Red Hat Network login and the bundled installer. 
+Remember, currently, as discussed in Module 1, this is still a Technical Preview. The installer is available for Red Hat Enterprise Linux across two architectures x86 and Arm. In addition, it is available in two formats, a lightweight installer, which assumes both Internet access and a Red Hat Network login and the bundled installer. 
 
 We will use the bundled installer which includes all its dependencies, including the container images for the major components and also for the execution environments, etc. We will explore these during the installation process.
 
@@ -28,7 +28,7 @@ It is worth watching the output of the `tar` extraction as this will give you a 
 ====
 +
 
-As the tar archive unpacks you will see there are 2 major components to the bundle installer, *collections* and the *bundle* itself is largely composed of container images of components (controller, hub, etc.), supporting infrastructure (postgres, redis), and the Execution Environments. The unbundled installer pulls these in at install time and is considerably smaller.
+As the tar archive unpacks you will see there are two major components to the bundle installer, *collections* and the *bundle* itself is largely composed of container images of components (controller, hub, etc.), supporting infrastructure (postgres, redis), and the Execution Environments. The unbundled installer pulls these in at install time and is considerably smaller.
 +
 
 [source,ini,role=execute,subs=attributes+]
@@ -131,11 +131,11 @@ In this section you will configure your inventory, logically this can be seen as
 
 === Editing the Inventory
 
-All basic configuration for the AAP2 Containaerized Installer is done via the `inventory` file. 
+All basic configuration for the AAP2 Containerized Installer is done via the `inventory` file. 
 
 [TIP] 
 ====
-Your machine, `bastion` comes with both `vim` and `nano` pre-installed but `mc` (Midnight Commander), neovim, and `emacs` are all available via `dnf` e.g. `sudo dnf install -y mc` etc. Please feel free to install your favorite editor.
+Your machine, `bastion` comes with both `vim` and `nano` pre-installed but `mc` (Midnight Commander), `neovim`, and `emacs` are all available via `dnf` e.g. `sudo dnf install -y mc` etc. Please feel free to install your favorite editor.
 
 Those of you using Visual Studio Code on your laptops or similar are welcome to use the `ssh` vars in the *Resources and Credentials* Module for remote editing however setup and configuration are not covered in the lab.
 ====
@@ -206,7 +206,7 @@ postgresql_admin_password=r3dh4t1!
 ====
 These are set to match the pre-configured vars in the previous module. 
 
-You could also in this section point to an appropriately configured Postgresql DBaaS such as AWS's RDS. (Not recommended if you are not deploying the rest of your infrastructure on the same cloud/VPC).
+You could also in this section point to an appropriately configured PostgreSQL DBaaS such as AWS's RDS. (Not recommended if you are not deploying the rest of your infrastructure on the same cloud/VPC).
 ====
 
 . Configure the Common Variables - Section 1
@@ -314,4 +314,4 @@ aap2 | SUCCESS => {
 
 == Summary
 
-Hopefully, you will agree that the configuration of the `inventory` is quite straightforward. Also, it should be apparent how you could configure all sorts of different scenarios via the inventory groups ranging from an "all in one" install on a single node to a completely distributed 1 service per node type install.
+Hopefully, you will agree that the configuration of the `inventory` is quite straightforward. Also, it should be apparent how you could configure all sorts of different scenarios via the inventory groups ranging from an "all in one" install on a single node to a completely distributed one service per node type install.

@@ -29,7 +29,7 @@ tree -L 1
 . The Containerized AAP2 Installer - bundled version
 . A sample `inventory` for the entire lab infrastructure
 . An AAP2 Manifest - injected in Module 6
-. A simple Postres installer repository
+. A simple Postgres installer repository
 . A sample solution repo for reference
 
 == Initial Configuration
@@ -124,7 +124,7 @@ Your environment is now ready for you to customize, if there are tools and edito
 The lab will take approximately 60-90 minutes so you can take a moment to add your favorite tools, aliases, etc. to make your environment your own.
 For example any of your favorite tools such as linters, `ripgrep`, `neovim` etc. 
 
-You may also want to consider adjusting your environment to your taste or perhaps your `~/.vimrc`, ~/.bashrc` etc. You'll be on this host for 90 minutes so take a moment to make it your own.
+You may also want to consider adjusting your environment to your taste or perhaps your `~/.vimrc`, `~/.bashrc` etc. You'll be on this host for 90 minutes so take a moment to make it your own.
 
 . If you want to install any tools from EPEL you can use the following command to add EPEL. In Production, we would recommend not using EPEL.
 +
@@ -150,7 +150,7 @@ Installed:
 Complete!
 ----
 
-== Sumaary
+== Summary
 
 In this section, we simply set up our `bastion` host with the necessary tooling before installation. In addition, there was the option to tune the toolchain to reflect personal preferences.
 

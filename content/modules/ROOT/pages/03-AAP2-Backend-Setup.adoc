@@ -16,10 +16,10 @@ Given that the installer for Containerized AAP2 supports creating and running a 
 
 [NOTE]
 ====
-Not all components need to be installed, for example, if you don't need Hub or EDA, you can omit their configuration/installation. IE by commenting out the relevant parts of the installer inventory.
+Not all components need to be installed, for example, if you don't need Hub or EDA, you can omit their configuration/installation. I.e. by commenting out the relevant parts of the installer inventory.
 ====
 
-In this module, we will install our version of Postgres to show how the Containerized AAP2 Installer supports this and allows Controller etc to make use of a pre-existing instance of Postgres. This is useful in many scenarios eg customer has a dedicated Postgres team or uses Cloud-Based DBaaS (Database as a Service) with a Postgres flavor (in our case this must be Postgres 13 currently).
+In this module, we will install our version of Postgres to show how the Containerized AAP2 Installer supports this and allows Controller etc to make use of a pre-existing instance of Postgres. This is useful in many scenarios e.g. customer has a dedicated Postgres team or uses Cloud-Based DBaaS (Database as a Service) with a Postgres flavor (in our case this must be Postgres 13 currently).
 
 The Two Tier architecture also provides several advantages:
 

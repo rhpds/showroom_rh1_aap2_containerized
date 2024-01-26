@@ -2,7 +2,7 @@
 
 icon:clock-o[Duration: 10 Minutes] Duration: 10 minutes
 
-Welcome to the Red Hat One Containerized Ansible Automation Platform 2 lab where we will explore the installation options of this Technical Preview (TechPreview) Product and work our way through 1 scenario whilst in parallel explore what is going on under the covers with the installation gaining insight into how it actual deploys and functions.
+Welcome to the Red Hat One Containerized Ansible Automation Platform 2 lab where we will explore the installation options of this Technical Preview (TechPreview) Product and work our way through a scenario whilst in parallel explore what is going on under the covers with the installation gaining insight into how it actual deploys and functions.
 
 // TODO: Add intro 
 
@@ -18,7 +18,7 @@ In this, opening, module, we will explore the lab goals, our environment and int
 * Install the Containerized version of AAP2
 ** Automation Hub
 ** Event Driven Automation
-** Postgres
+** PostgreSQL Database
 * Configure AAP2 Containerized via the Postinstall option
 * Explore the AAP2 Containerized environment
 ** Storage 
@@ -103,7 +103,7 @@ image::topology.png[Lab Topology,align="center",width="100%"]
 
 |===
 
-The terminals to your right are logged in via `ssh` to the bastion as the `devops` user. You can directly `ssh` to any of the hosts in your environment. You will run the installer from `bastion` but your Contaierized AAP2 will deploy to `aap2` and your Postgres database to `aap2-database`
+The terminals to your right are logged in via `ssh` to the bastion as the `devops` user. You can directly `ssh` to any of the hosts in your environment. You will run the installer from `bastion` but your Containerized AAP2 will deploy to `aap2` and your Postgres database to `aap2-database`
 
 NOTE: All instances are running RHEL 9.3 and are sized appropriately for the lab.
 
